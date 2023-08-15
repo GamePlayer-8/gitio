@@ -1,0 +1,19 @@
+name: 'gitio'
+description: 'An I/O for the Git server communication & builder.'
+
+inputs:
+  type:
+    description: 'Runtime I/O type.'
+    required: false
+    default: 'checkout'
+  cmd:
+    description: 'Commands for the I/O type.'
+    required: false
+    default: ''
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.type }}
+    - ${{ inputs.cmd }}
