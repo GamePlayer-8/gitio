@@ -45,6 +45,6 @@ To the extent possible, if any provision of this Public License is deemed unenfo
 
 ## Attributions
 
-- https://xaviama.dank-me.me
+- https://xaviama.i2p
 
 *This is a revised, second version of the license. However, it is always advisable to consult with a legal expert for any licensing matters.*
