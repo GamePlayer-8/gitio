@@ -1,6 +1,6 @@
 <p align="center" style="white-space: pre-line;">
   <a href="https://chimmie.k.vu/gitio" class="no-highlight">
-    <img src="docs/gitio.png" width="400" alt=":gitio-splash:">
+    <img src="docs/gitio.png" width="200" alt=":gitio-splash:">
   </a>
 </p>
 
