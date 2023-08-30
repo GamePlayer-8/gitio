@@ -6,7 +6,7 @@ xapt() {
     export DEBIAN_FRONTEND=noninteractive
     export TZ=Europe/Warsaw
     apt update
-    apt install --yes git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh jq
+    apt install --yes git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh-server jq
 }
 
 xapk() {
