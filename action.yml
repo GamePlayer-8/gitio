@@ -1,4 +1,4 @@
-name: 'gitio'
+name: 'gitio-chimmie'
 description: 'An I/O for the Git server communication & builder.'
 
 inputs:
