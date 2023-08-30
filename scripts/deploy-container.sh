@@ -11,10 +11,9 @@ _CONTAINERS_USERNS_CONFIGURED=""
 
 podman system migrate
 
-REGISTRY_USER="${REGISTRY_USER,,}"
-REGISTRY_DOMAIN="${REGISTRY_DOMAIN,,}"
-OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME,,}"
-
+REGISTRY_USER=$(echo "${REGISTRY_USER}" | tr '[:upper:]' '[:lower:]')
+REGISTRY_DOMAIN=$(echo "${REGISTRY_DOMAIN}" | tr '[:upper:]' '[:lower:]')
+OUTPUT_IMAGE_NAME=$(echo "${OUTPUT_IMAGE_NAME}" | tr '[:upper:]' '[:lower:]')
 echo "${REGISTRY_TOKEN}" | podman login "${REGISTRY_DOMAIN}" -u "${REGISTRY_USER}" --password-stdin
 
 cd "${DOCKERFILE}"
