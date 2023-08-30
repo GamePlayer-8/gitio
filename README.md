@@ -9,10 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://ci.codeberg.org/repos/00000"><img alt=":woodpecker-ci:" src="https://ci.codeberg.org/api/badges/00000/status.svg" height="20" /></a>
+  <a href="https://ci.codeberg.org/repos/12564"><img alt=":woodpecker-ci:" src="https://ci.codeberg.org/api/badges/12564/status.svg" height="20" /></a>
   <a href="https://codeberg.org/GamePlayer-8/gitio"><img alt=":codeberg:" src="https://codeberg.org/Codeberg/GetItOnCodeberg/media/branch/main/get-it-on-neon-blue.png" height="20" /></a>
 </p>
-
 <p align="center">
   <b>GitHub</b>
 </p>
