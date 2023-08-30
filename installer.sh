@@ -2,26 +2,26 @@
 
 os="$(uname -s)"
 
-apt() {
+xapt() {
     export DEBIAN_FRONTEND=noninteractive
     export TZ=Europe/Warsaw
     apt update
     apt install --yes git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh jq
 }
 
-apk() {
+xapk() {
     apk add --no-cache podman fuse-overlayfs gawk tar gzip wget curl git coreutils openssh jq
 }
 
-pacman() {
+xpacman() {
     pacman -Syu --noconfirm --overwrite=* git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh jq
 }
 
-dnf() {
+xdnf() {
     dnf install -y git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh jq
 }
 
-opium() {
+xopium() {
     echo "Your Linux is wild and opium isn't implemented yet, exiting..."
     exit 2
 }
@@ -40,31 +40,31 @@ case "$os" in
         elif [ -f /etc/arch-release ]; then
             distro="Arch"
         else
-            opium
+            xopium
         fi
 
         case "$distro" in
-            Debian)
-                apt
-                ;;
-            Ubuntu)
-                apt
-                ;;
-            Fedora)
-                dnf
-                ;;
-            Alpine)
-                apk
-                ;;
-            Arch)
-                pacman
-                ;;
-            Artix)
-                pacman
-                ;;
-            *)
-                opium
-                ;;
+                "Debian")
+                    xapt
+                    ;;
+                "Ubuntu")
+                    xapt
+                    ;;
+                "Fedora")
+                    xdnf
+                    ;;
+                "Alpine")
+                    xapk
+                    ;;
+                "Arch")
+                    xpacman
+                    ;;
+                "Artix")
+                    xpacman
+                    ;;
+                *)
+                    xopium
+                    ;;
         esac
 
         ;;
