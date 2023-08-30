@@ -6,19 +6,19 @@ xapt() {
     export DEBIAN_FRONTEND=noninteractive
     export TZ=Europe/Warsaw
     apt update
-    apt install --yes git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh-server jq
+    apt install --yes git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh-server jq sed
 }
 
 xapk() {
-    apk add --no-cache podman fuse-overlayfs gawk tar gzip wget curl git coreutils openssh jq
+    apk add --no-cache podman fuse-overlayfs gawk tar gzip wget curl git coreutils openssh jq sed
 }
 
 xpacman() {
-    pacman -Syu --noconfirm --overwrite=* git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh jq
+    pacman -Syu --noconfirm --overwrite=* git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh jq sed
 }
 
 xdnf() {
-    dnf install -y git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh jq
+    dnf install -y git podman coreutils fuse-overlayfs gawk tar gzip wget curl openssh jq sed
 }
 
 xopium() {

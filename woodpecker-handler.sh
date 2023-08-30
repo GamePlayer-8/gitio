@@ -9,6 +9,24 @@ if ! [ -f /tmp/installed.ci ]; then
     echo 'OK' > /tmp/installed.ci
 fi
 
+if ! [ -d /listen ]; then
+    mkdir -p /etc/containers 2>/dev/null 3>&2
+    cp "$SCRIPT_PATH"/pipeline/containers.conf /etc/containers/containers.conf
+    chmod 644 /etc/containers/containers.conf && \
+    sed -i -e 's|^#mount_program|mount_program|g' -e \
+    '/additionalimage.*/a "/var/lib/shared",' -e \
+    's|^mountopt[[:space:]]*=.*$|mountopt = "nodev,fsync=0"|g' \
+    /etc/containers/storage.conf && \
+    mkdir -p /var/lib/shared/overlay-images \
+    /var/lib/shared/overlay-layers /var/lib/shared/vfs-images \
+    /var/lib/shared/vfs-layers && \
+    touch /var/lib/shared/overlay-images/images.lock && \
+    touch /var/lib/shared/overlay-layers/layers.lock && \
+    touch /var/lib/shared/vfs-images/images.lock && \
+    touch /var/lib/shared/vfs-layers/layers.lock && \
+    mkdir /listen
+fi
+
 case "$MODE" in
         "env")
             export DEBIAN_FRONTEND=noninteractive
