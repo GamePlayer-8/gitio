@@ -1,0 +1,20 @@
+# .woodpecker.yml
+when:
+  branch: [main, master, dev]
+
+steps:
+  main:
+    image: ubuntu
+    commands:
+      - echo "Starting..."
+      - export LOCAL_DIR="$(pwd)"
+      - bash woodpecker-container.sh
+      - bash woodpecker-handler.sh env
+      - export GIT_EMAIL='gameplayer2019pl@tutamail.com'
+      - export GIT_DIR="$(pwd)"
+      - export CMD_TYPE='branch'
+      - bash woodpecker-handler.sh ssh
+      - bash woodpecker-handler.sh
+    secrets:
+      - SYSTEM_TOKEN
+      - OCI_TOKEN

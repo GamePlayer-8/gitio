@@ -13,6 +13,7 @@ podman system migrate
 
 REGISTRY_USER="${REGISTRY_USER,,}"
 REGISTRY_DOMAIN="${REGISTRY_DOMAIN,,}"
+OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME,,}"
 
 echo "${REGISTRY_TOKEN}" | podman login "${REGISTRY_DOMAIN}" -u "${REGISTRY_USER}" --password-stdin
 

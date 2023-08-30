@@ -5,9 +5,9 @@ FROM alpine
 LABEL "com.github.actions.name"="GitIO"
 LABEL "com.github.actions.description"="An I/O for the Git server communication & builder."
 LABEL "com.github.actions.icon"="docs/gitio.png"
-LABEL "com.github.actions.color"="purple"
+LABEL "com.github.actions.color"="orange"
 
-RUN apk add --no-cache podman fuse-overlayfs gawk tar gzip git bash
+RUN apk add --no-cache podman fuse-overlayfs gawk tar gzip git bash jq curl wget
 
 RUN cp pipeline/containers.conf /etc/containers/containers.conf
 RUN chmod 644 /etc/containers/containers.conf && \
@@ -25,16 +25,12 @@ RUN chmod 644 /etc/containers/containers.conf && \
     mkdir /listen
 
 # Copy the action's code into the container
-COPY ./scripts .
-COPY ./LICENSE.txt .
-COPY ./README.md .
-RUN mkdir docs
-COPY ./docs/gitio.png ./docs/
+RUN mkdir /gitio-docs
+COPY ./scripts/* /scripts/
+COPY ./LICENSE.txt /gitio-docs/
+COPY ./README.md /gitio-docs/
+COPY ./docs/gitio.png /gitio-docs/
+COPY ./runtime.sh /gitio-runtime.sh
 
-COPY ./entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh && \
-    chmod +x ./scripts/*
-
-# Set the entrypoint command
-ENTRYPOINT ["/entrypoint.sh"]
+RUN chmod +x /gitio-scripts/* && \
+    chmod +x /gitio-runtime.sh
