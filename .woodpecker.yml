@@ -8,13 +8,14 @@ steps:
     commands:
       - echo "Starting..."
       - export LOCAL_DIR="$(pwd)"
-      - bash woodpecker-container.sh
-      - bash woodpecker-handler.sh env
+      - sh woodpecker-container.sh
+      - sh woodpecker-handler.sh env
+      - sh woodpecker-handler.sh codeberg
       - export GIT_EMAIL='gameplayer2019pl@tutamail.com'
       - export GIT_DIR="$(pwd)"
       - export CMD_TYPE='branch'
-      - bash woodpecker-handler.sh ssh
-      - bash woodpecker-handler.sh
+      - sh woodpecker-handler.sh ssh
+      - sh woodpecker-handler.sh
     secrets:
       - SYSTEM_TOKEN
       - OCI_TOKEN

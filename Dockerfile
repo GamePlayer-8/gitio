@@ -7,7 +7,7 @@ LABEL "com.github.actions.description"="An I/O for the Git server communication 
 LABEL "com.github.actions.icon"="docs/gitio.png"
 LABEL "com.github.actions.color"="orange"
 
-RUN apk add --no-cache podman fuse-overlayfs gawk tar gzip git bash jq curl wget
+RUN apk add --no-cache podman fuse-overlayfs gawk tar gzip git jq curl wget
 
 RUN cp pipeline/containers.conf /etc/containers/containers.conf
 RUN chmod 644 /etc/containers/containers.conf && \

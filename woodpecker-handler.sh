@@ -23,6 +23,10 @@ case "$MODE" in
             export GIT_DOMAIN="$CI_REPO_OWNER"'.'"$GIT_HOST"
             export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
             ;;
+        "codeberg")
+            export GIT_DOMAIN="$CI_REPO_OWNER"'.'"codeberg.page"
+            export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
+            ;;
         "ssh")
             sh "$SCRIPT_PATH"/ssh.sh
             ;;
@@ -31,6 +35,6 @@ case "$MODE" in
                 echo 'Please configure CMD_TYPE environment variable.'
                 exit 5
             fi
-            bash "$SCRIPT_PATH"/runtime.sh
+            sh "$SCRIPT_PATH"/runtime.sh
             ;;
 esac

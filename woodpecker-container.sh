@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 SCRIPT_PATH="$(dirname "$(realpath "$0")")"
 
@@ -14,4 +14,4 @@ export LOCAL_DIR="$SCRIPT_PATH"
 export DOCKERFILE="$SCRIPT_PATH"
 export REGISTRY_TOKEN="$OCI_TOKEN"
 
-bash "$SCRIPT_PATH"/scripts/deploy-container.sh
+sh "$SCRIPT_PATH"/scripts/deploy-container.sh

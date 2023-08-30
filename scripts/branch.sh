@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 GIT_BRANCH="${GIT_BRANCH:-'pages'}"
 GIT_USERNAME="${GIT_USERNAME:-'user'}"

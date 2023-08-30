@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 CMD_TYPE="${CMD_TYPE:-'checkout'}"
 CMD="${CMD:-''}"
@@ -28,7 +28,7 @@ container() {
     done
 
     SCRIPT_PATH="$(dirname "$(realpath "$0")")"
-    bash "$SCRIPT_PATH"/scripts/deploy-container.sh
+    sh "$SCRIPT_PATH"/scripts/deploy-container.sh
 }
 
 branch() {
@@ -43,7 +43,7 @@ branch() {
     done
 
     SCRIPT_PATH="$(dirname "$(realpath "$0")")"
-    bash "$SCRIPT_PATH"/scripts/branch.sh
+    sh "$SCRIPT_PATH"/scripts/branch.sh
 
 }
 

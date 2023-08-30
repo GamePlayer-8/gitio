@@ -32,8 +32,8 @@ runs:
 
     - name: Setup Wizard - Domains
       run: |
-          echo "GIT_DOMAIN=$(bash /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
-          echo "GIT_WEBPAGE=https://$(bash /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
+          echo "GIT_DOMAIN=$(sh /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
+          echo "GIT_WEBPAGE=https://$(sh /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
 
     - name: Setup Wizard - Inputs
       run: |
@@ -42,7 +42,7 @@ runs:
 
     - name: Start runtime
       run: |
-          bash /gitio-runtime.sh
+          sh /gitio-runtime.sh
 
 branding:
   icon: 'https://github.com/GamePlayer-8/gitio/raw/main/docs/gitio.png'

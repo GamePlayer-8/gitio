@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 SCRIPT_PATH="$(dirname "$(realpath "$0")")"
 OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME:-'image:latest'}"
