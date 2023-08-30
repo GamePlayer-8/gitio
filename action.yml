@@ -20,37 +20,27 @@ runs:
   steps:
     - name: Setup Wizard
       run: |
-          if [ "$GITHUB_ACTIONS" = "true" ]; then
-              echo "LOCAL_DIR=$(pwd)" >> $GITHUB_ENV
-              echo "GIT_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-              echo "GIT_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-              echo "GIT_PROJECT_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
-              echo "GIT_USERNAME=${{ github.repository_owner }}" >> $GITHUB_ENV
-              echo "GIT_REPO=${{ github.repository }}" >> $GITHUB_ENV
-              echo "DEBIAN_FRONTEND=noninteractive" >> $GITHUB_ENV
-              echo 'TZ="Europe/Warsaw"' >> $GITHUB_ENV
-          else
-          fi
+          echo "DEBIAN_FRONTEND=noninteractive" >> $GITHUB_ENV
+          echo 'TZ="Europe/Warsaw"' >> $GITHUB_ENV
+          echo "LOCAL_DIR=$(pwd)" >> $GITHUB_ENV
+          echo "GIT_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          echo "GIT_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "GIT_PROJECT_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+          echo "GIT_USERNAME=${{ github.repository_owner }}" >> $GITHUB_ENV
+          echo "GIT_REPO=${{ github.repository }}" >> $GITHUB_ENV
+          echo "GIT_HOST='github.com'" >> $GITHUB_ENV
 
     - name: Setup Wizard - Domains
       run: |
-          if [ "$GITHUB_ACTIONS" = "true" ]; then
-              echo "GIT_DOMAIN=$(bash /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
-              echo "GIT_WEBPAGE=https://$(bash /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
-          else
-
-          fi
+          echo "GIT_DOMAIN=$(bash /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
+          echo "GIT_WEBPAGE=https://$(bash /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
 
     - name: Setup Wizard - Inputs
       run: |
-          if [ "$GITHUB_ACTIONS" = "true" ]; then
-              echo "CMD_TYPE=${{ inputs.type }}" >> $GITHUB_ENV
-              echo "CMD=${{ inputs.cmd }}" >> $GITHUB_ENV
-          else
-
-          fi
+          echo "CMD_TYPE=${{ inputs.type }}" >> $GITHUB_ENV
+          echo "CMD=${{ inputs.cmd }}" >> $GITHUB_ENV
 
     - name: Start runtime
       run: |
-          bash /gitio-runtime.sh "${CMD_TYPE}" "${CMD}"
+          bash /gitio-runtime.sh
 

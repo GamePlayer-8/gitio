@@ -5,7 +5,7 @@ FROM alpine
 LABEL "com.github.actions.name"="GitIO"
 LABEL "com.github.actions.description"="An I/O for the Git server communication & builder."
 LABEL "com.github.actions.icon"="docs/gitio.png"
-LABEL "com.github.actions.color"="purple"
+LABEL "com.github.actions.color"="orange"
 
 RUN apk add --no-cache podman fuse-overlayfs gawk tar gzip git bash jq curl wget
 
@@ -26,7 +26,7 @@ RUN chmod 644 /etc/containers/containers.conf && \
 
 # Copy the action's code into the container
 RUN mkdir /gitio-docs
-COPY ./scripts/* /gitio-scripts/
+COPY ./scripts/* /scripts/
 COPY ./LICENSE.txt /gitio-docs/
 COPY ./README.md /gitio-docs/
 COPY ./docs/gitio.png /gitio-docs/
