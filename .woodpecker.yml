@@ -11,9 +11,9 @@ steps:
     commands:
       - echo "Starting..."
       - export LOCAL_DIR="$(pwd)"
-      - sh woodpecker-container.sh
       - sh woodpecker-handler.sh env
       - sh woodpecker-handler.sh codeberg
+      - sh woodpecker-container.sh
       - export GIT_EMAIL='gameplayer2019pl@tutamail.com'
       - export GIT_DIR="$(pwd)"
       - export CMD_TYPE='branch'
