@@ -1,5 +1,10 @@
 name: 'gitio-chimmie'
 description: 'An I/O for the Git server communication & builder.'
+author: 'Chimmie Firefly'
+
+branding:
+  icon: 'activity'
+  color: 'orange'
 
 inputs:
   type:
@@ -44,6 +49,3 @@ runs:
       run: |
           sh /gitio-runtime.sh
 
-branding:
-  icon: 'https://github.com/GamePlayer-8/gitio/raw/main/docs/gitio.png'
-  color: '#f34f29'

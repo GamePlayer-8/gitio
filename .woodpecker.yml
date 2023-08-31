@@ -6,8 +6,6 @@ steps:
   main:
     image: ubuntu
 
-    privileged: true
-    
     commands:
       - echo "Starting..."
       - export LOCAL_DIR="$(pwd)"
