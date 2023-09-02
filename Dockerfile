@@ -19,9 +19,10 @@ RUN apk add --no-cache go && \
     cd /kaniko && \
     make && \
     mv out/executor /usr/bin/kaniko && \
-    chmod +x /usr/bin/kaniko && \
     apk purge go && \
-    cd / && rm -rf kaniko
+    cd / && rm -rf kaniko && \
+    strip /usr/bin/kaniko && \
+    chmod +x /usr/bin/kaniko
 
 WORKDIR /
 
