@@ -112,7 +112,8 @@ checkout() {
 
 container() {
     for element in $CMD; do
-        if ! [[ $element == *":"* ]]; then
+        echo "$CMD"
+        if ! [ -z "${element##*:*}" ]; then
             echo 'Missing data syntax in '"$element"'. Exiting...'
             exit 1
         fi
