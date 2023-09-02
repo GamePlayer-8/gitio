@@ -14,6 +14,7 @@ build_deb() {
     sh "${INSTALLER}" dpkg-deb
     cd "$SCRIPT_PATH"
     dpkg-deb --build deb/debian
+    mv deb/debian.deb ./gitio.deb
     sha256sum "$SCRIPT_PATH"/*.deb > "$SCRIPT_PATH"/debian.sha256.txt
 }
 
