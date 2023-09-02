@@ -32,13 +32,18 @@ build_zst() {
 build_apk() {
     sh "${INSTALLER}" alpine-sdk
     rm -rf "$SCRIPT_PATH"/apk
-    mkdir -p "$SCRIPT_PATH"/apk/{src,pkg}
+    mkdir -p "$SCRIPT_PATH"/apk/src
+    mkdir "$SCRIPT_PATH"/apk/pkg
     cd "$SCRIPT_PATH"/apk/src
     cp "$SCRIPT_PATH"/APKBUILD .
-    abuild -r
+    sh "$INSTALLER" sudo
+    adduser -D -G abuild abuild
+    chown -R abuild "$SCRIPT_PATH"/apk
+    sudo -u abuild abuild -r
     cd "$SCRIPT_PATH"
     mv "$SCRIPT_PATH"/apk/pkg/* gitio.apk
     rm -rf apk
+    chown root:root gitio.apk
 }
 
 prepare() {
