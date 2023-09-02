@@ -6,7 +6,14 @@ MODE="${1:-MODE}"
 MODE="${MODE:-CMD_TYPE}"
 MODE="${MODE:-'checkout'}"
 
-XCMD="${@:2}"
+XCMD=""
+shift  # Shift to remove the first argument (the script name)
+
+# Loop through the remaining arguments
+for arg in "$@"; do
+  XCMD="$XCMD $arg"
+done
+
 CMD="${XCMD:-CMD}"
 CMD="${CMD:-''}"
 
@@ -110,9 +117,13 @@ container() {
             echo 'Missing data syntax in '"$element"'. Exiting...'
             exit 1
         fi
-        IFS=":" read -r name value <<< "$element"
+        IFS=":" read -r name value <<EOF
+$element
+EOF
         export "$name=$value"
-    done < <(echo "$CMD")
+    done <<EOF
+$CMD
+EOF
 
     if ! [ -f "/tmp/kaniko.ci" ]; then
         sh "$INSTALLER" make go docker
@@ -151,9 +162,13 @@ branch() {
             echo 'Missing data syntax in '"$element"'. Exiting...'
             exit 1
         fi
-        IFS=":" read -r name value <<< "$element"
+        IFS=":" read -r name value <<EOF
+$element
+EOF
         export "$name=$value"
-    done < <(echo "$CMD")
+    done <<EOF
+$CMD
+EOF
 
     git config --global credential.helper store
     git config --global user.name "$GIT_USERNAME"
