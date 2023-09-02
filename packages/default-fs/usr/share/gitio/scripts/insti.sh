@@ -95,7 +95,7 @@ get_installer() {
     esac
 }
 
-installer='apt'  # "$(get_installer "$os")"
+installer="$(get_installer "$os")"
 
 updated_list=""
 
