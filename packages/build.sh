@@ -44,7 +44,7 @@ build_apk() {
     sudo -u abuild abuild checksum
     sudo -u abuild abuild -r -m
     cd "$SCRIPT_PATH"
-    mv /home/abuild/packages/pkg/x86_64/*.apk gitio.apk
+    find / -name 'gitio-*.apk' | xargs -I '{}' sh -c 'mv {} gitio.apk'
     rm -rf apk
     chown root:root gitio.apk
 }
