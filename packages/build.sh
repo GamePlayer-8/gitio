@@ -11,7 +11,7 @@ build_deb() {
     cp "$SCRIPT_PATH"/control "$SCRIPT_PATH"/deb/debian/DEBIAN/control
     chmod 0755 "$SCRIPT_PATH"/deb/debian/DEBIAN/*
     chmod 0644 "$SCRIPT_PATH"/deb/debian/DEBIAN/control
-    sh "${INSTALLER}" dpkg-deb
+    sh "${INSTALLER}" apt-utils
     cd "$SCRIPT_PATH"
     dpkg-deb --build deb/debian
     mv deb/debian.deb ./gitio.deb
