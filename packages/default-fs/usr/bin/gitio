@@ -114,16 +114,18 @@ checkout() {
 container() {
     echo '[CONTAINER]'
     echo "$CMD"
-    for element in $CMD; do
-        if ! [ -z "${element##*:*}" ]; then
-            echo 'Missing data syntax in '"$element"'. Exiting...'
-            exit 1
-        fi
-        IFS=":" read -r name value <<EOF
+    if ! [ "$CMD" = "" ]; then
+        for element in $CMD; do
+            if ! [ -z "${element##*:*}" ]; then
+                echo 'Missing data syntax in '"$element"'. Exiting...'
+                exit 1
+            fi
+            IFS=":" read -r name value <<EOF
 $element
 EOF
-        export "$name=$value"
-    done
+            export "$name=$value"
+        done
+    fi
 
     if ! [ -f "/tmp/kaniko.ci" ]; then
         sh "$INSTALLER" make go docker
@@ -158,16 +160,18 @@ EOF
 branch() {
     echo '[BRANCH]'
     echo "$CMD"
-    for element in $CMD; do
-        if ! [ -z "${element##*:*}" ]; then
-            echo 'Missing data syntax in '"$element"'. Exiting...'
-            exit 1
-        fi
-        IFS=":" read -r name value <<EOF
+    if ! [ "$CMD" = "" ]; then
+        for element in $CMD; do
+            if ! [ -z "${element##*:*}" ]; then
+                echo 'Missing data syntax in '"$element"'. Exiting...'
+                exit 1
+            fi
+            IFS=":" read -r name value <<EOF
 $element
 EOF
-        export "$name=$value"
-    done
+            export "$name=$value"
+        done
+    fi
 
     git config --global credential.helper store
     git config --global user.name "$GIT_USERNAME"
