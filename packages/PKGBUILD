@@ -1,7 +1,7 @@
 # Maintainer: Chimmie Firefly <gameplayer2019pl (at) tutamail (dot) com>
 pkgname=gitio-git
 _pkgname=gitio-git
-pkgver=r1693673590
+pkgver=0
 pkgrel=1
 pkgdesc='Frontend API for interacting with git hosting for CI.'
 
@@ -19,7 +19,6 @@ depends=(
     'sed'
     'gawk'
     'curl'
-    'jq'
 )
 
 optdepends=(

@@ -56,7 +56,7 @@ system_environment() {
 }
 
 app_installer() {
-    sh "$INSTALLER" tar gzip git openssh jq curl gawk coreutils
+    sh "$INSTALLER" tar gzip git curl gawk coreutils
 }
 
 xssh() {

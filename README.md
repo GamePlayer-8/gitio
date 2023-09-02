@@ -169,19 +169,23 @@ Woodpecker has a lot of `CI_*` variables, what you can override more easily than
 
 # Download for distro
 
-Currently Arch based & Debian based distros are supported.
+Currently Alpine based, Arch based & Debian based distros are supported.
 
-## Debian
+# Alpine
 
-`curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/gitio.deb && dpkg -i gitio.deb`
+`curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/gitio.apk"`
 
 ## Arch
 
-`curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/PKGBUILD && makepkg -si`
+`curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/PKGBUILD" && makepkg -si`
 
 ### AUR
 
 `yay -S gitio-git`
+
+## Debian
+
+`curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/gitio.deb" && dpkg -i gitio.deb`
 
 # Contributing
 

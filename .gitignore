@@ -1,3 +1,5 @@
 packages/zst/*
 packages/*.txt
 packages/deb/*
+packages/*.deb
+packages/*.apk
