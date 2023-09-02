@@ -9,7 +9,7 @@ steps:
     commands:
       - sh worker.sh
       - gitio branch GIT_BRANCH:pages
-      - gitio container OUTPUT_IMAGE_NAME:gitio:$GIT_BRANCH
+      - gitio container OUTPUT_IMAGE_NAME:gitio:$(basename "$CI_COMMIT_REF")
 
     secrets:
       - SYSTEM_TOKEN

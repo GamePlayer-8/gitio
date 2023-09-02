@@ -131,7 +131,7 @@ EOF
     fi
 
     if ! [ -f "/tmp/kaniko.ci" ]; then
-        sh "$INSTALLER" make go docker
+        sh "$INSTALLER" make go docker bash
 
         git clone --recursive https://github.com/GoogleContainerTools/kaniko /kaniko
 
@@ -144,8 +144,8 @@ EOF
 
         echo 'OK' > /tmp/kaniko.ci
     fi
-
-    OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME:-'image:latest'}"
+    standard="$GIT_PROJECT_NAME":"$GIT_BRANCH"
+    OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME:-$standard}"
     export GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
 
     GIT_USERNAME="$(echo "${GIT_USERNAME}" | tr '[:upper:]' '[:lower:]')"
