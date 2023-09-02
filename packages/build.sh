@@ -37,6 +37,7 @@ build_apk() {
     cd "$SCRIPT_PATH"/apk/src
     cp "$SCRIPT_PATH"/APKBUILD .
     sh "$INSTALLER" sudo
+    apk update
     adduser -D -G abuild abuild
     chown -R abuild "$SCRIPT_PATH"/apk
     sudo -u abuild abuild-keygen -a -n -q
