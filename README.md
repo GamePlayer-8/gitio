@@ -1,5 +1,5 @@
 <p align="center" style="white-space: pre-line;">
-  <a href="https://chimmie.k.vu/gitio" class="no-highlight">
+  <a href="https://gameplayer-8.codeberg.page/gitio" class="no-highlight">
     <img src="docs/gitio.png" width="200" alt=":gitio-splash:">
   </a>
 </p>
@@ -64,16 +64,19 @@ Checkout with `git clone` advanced functionality:
   with:
     type: 'checkout'
     cmd: '--recursive -b gh-pages'
+    wizard: 'true'
 ```
 
 Full functionality of `git clone` is available under command `git clone --help` on your computer.
-<p></p>
+<br/>
 Environment variables:
 
- - `GIT_USERNAME`
- - `GIT_TOKEN`
- - `GIT_HOST`
- - `GIT_REPO`
+ - `GITHUB_NAME`
+ - `GITHUB_TOKEN`
+ - `GITHUB_OWNER`
+ - `GITHUB_REPO`
+
+Implement those variables by diabling Setup Wizard & setting them up manually in the environment.
 
 <hr/>
 
@@ -84,7 +87,7 @@ Branch upload:
   uses: gameplayer-8/gitio@v1
   with:
     type: 'branch'
-    cmd: 'GIT_DIR:/home/github/pages GIT_EMAIL:user@gmail.com'
+    cmd: 'GIT_WORKDIR:/home/github/pages GIT_EMAIL:user@gmail.com'
 ```
 
 Full list of environment variables for `cmd`:
@@ -94,7 +97,7 @@ Full list of environment variables for `cmd`:
  - `GIT_TOKEN`
  - `GIT_EMAIL`
  - `GIT_HOST`
- - `GIT_DIR`
+ - `GIT_WORKDIR`
  - `GIT_PROJECT_NAME`
  - `GIT_REPO`
 
@@ -107,16 +110,16 @@ Container publishment:
   uses: gameplayer-8/gitio@v1
   with:
     type: 'container'
-    cmd: 'OUTPUT_IMAGE_NAME:alpine:latest DOCKERFILE:.'
+    cmd: 'OUTPUT_IMAGE_NAME:alpine:latest GIT_WORKDIR:.'
 ```
 
 Full list of environment variables for `cmd`:
 
  - `OUTPUT_IMAGE_NAME`
- - `DOCKERFILE`
- - `REGISTRY_USER`
- - `REGISTRY_DOMAIN`
- - `REGISTRY_TOKEN`
+ - `GIT_WORKDIR`
+ - `GIT_HOST`
+ - `GIT_USERNAME`
+ - `GIT_TOKEN`
 
 <hr/>
 </details>
@@ -128,7 +131,7 @@ Full list of environment variables for `cmd`:
 
 Since Woodpecker CI lacks in action functionality,
 you would need to execute `curl https://gameplayer-8.codeberg.page/gitio/get.sh | sh`.
-<p></p>
+<br/>
 
 Usage in the workflow:
 
@@ -139,23 +142,28 @@ when:
 
 steps:
   main:
-    image: ubuntu
+    image: codeberg.org/gameplayer-8/gitio
     commands:
       - curl https://gameplayer-8.codeberg.page/gitio/get.sh | sh
-      - sh /gitio/woodpecker-handler.sh env
-      - sh /gitio/woodpecker-handler.sh codeberg
-      - export CMD_TYPE='branch'
-      - export CMD='GIT_DIR:/runner/page GIT_EMAIL:example@example.com'
-      - sh /gitio/woodpecker-handler.sh
+      - gitio branch GIT_BRANCH:pages
+      - gitio container OUTPUT_IMAGE_NAME:$CI_REPO_NAME:$(basename "$CI_COMMIT_REF")
     secrets:
       - SYSTEM_TOKEN
+      - SYSTEM_TOKEN_PASSWD
+      - OCI_TOKEN
 ```
 
-`SYSTEM_TOKEN` is an SSH private key for accessing I/O of the Codeberg repo. It's being used as an alternative to `GIT_TOKEN` due to the fact, Forgejo has removed a way for shared tokens.
+ - `SYSTEM_TOKEN` is an SSH private key for accessing I/O of the Codeberg repo.
+ - `SYSTEM_TOKEN_PASSWD` is a standard token for git I/O (recommended).
+ - `OCI_TOKEN` is for container publishment.
 
-<p></p>
+<br/>
 
-Usage is pretty similar to the GitHub version (environment variable stays the same). Although it's a very experimental system since the libre version of CI lacks in many features, what GitIO is trying to implement anyway.
+Usage is pretty similar to the GitHub version (environment variable stays the same).
+
+<br/>
+
+Woodpecker has a lot of `CI_*` variables, what you can override more easily than on GitHub.
 
 </details>
 
