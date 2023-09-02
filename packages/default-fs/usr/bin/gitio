@@ -15,7 +15,7 @@ for arg in "$@"; do
 done
 
 CMD="${XCMD:-$CMD}"
-CMD="${CMD:-''}"
+CMD="${CMD:-"NaN"}"
 
 unset XCMD
 
@@ -114,7 +114,7 @@ checkout() {
 container() {
     echo '[CONTAINER]'
     echo "$CMD"
-    if ! [ "$CMD" = "" ]; then
+    if ! [ "$CMD" = "NaN" ]; then
         for element in $CMD; do
             if ! [ -z "${element##*:*}" ]; then
                 echo 'Missing data syntax in '"$element"'. Exiting...'
@@ -160,7 +160,7 @@ EOF
 branch() {
     echo '[BRANCH]'
     echo "$CMD"
-    if ! [ "$CMD" = "" ]; then
+    if ! [ "$CMD" = "NaN" ]; then
         for element in $CMD; do
             if ! [ -z "${element##*:*}" ]; then
                 echo 'Missing data syntax in '"$element"'. Exiting...'
