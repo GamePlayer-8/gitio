@@ -9,7 +9,9 @@ steps:
     commands:
       - sh worker.sh
       - gitio branch GIT_BRANCH:pages
-      - gitio container OUTPUT_IMAGE_NAME:gitio:$(basename "$CI_COMMIT_REF")
+      - export CONTAINER_TAGGING="$(basename "$CI_COMMIT_REF")"
+      - if [ "$CONTAINER_TAGGING" = "main" ]; then export CONTAINER_TAGGING="latest"; fi
+      - gitio container OUTPUT_IMAGE_NAME:$CI_REPO_NAME:"$CONTAINER_TAGGING"
 
     secrets:
       - SYSTEM_TOKEN
