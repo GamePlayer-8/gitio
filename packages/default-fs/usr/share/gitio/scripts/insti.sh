@@ -65,16 +65,16 @@ get_installer() {
                     "Ubuntu")
                         echo 'apt'
                         ;;
-                    "Fedora")
+                    "fedora")
                         echo 'dnf'
                         ;;
-                    "Alpine")
+                    "alpine")
                         echo 'apk'
                         ;;
-                    "Arch")
+                    "arch")
                         echo 'pacman'
                         ;;
-                    "Artix")
+                    "artix")
                         echo 'pacman'
                         ;;
                     "XaviaMa")
