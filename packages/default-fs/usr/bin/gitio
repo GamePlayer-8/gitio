@@ -157,7 +157,7 @@ EOF
     cd "${GIT_DIR}"
 
     kaniko --context . --dockerfile . --destination "${GIT_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
-    
+
     exit $?
 }
 
@@ -215,7 +215,7 @@ EOF
         cd "$GIT_DIR"
         rm -rf .git
         mkdir .git
-        git init
+        git init .git
     fi
 
     cd "${GIT_DIR}"
