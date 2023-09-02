@@ -115,8 +115,12 @@ EOF
         else
             updated_list="${updated_list}${xpackage} "
         fi
-    done < <(echo "$INSTALL")
-done < <(echo "$package_naming")
+    done <<EOF
+$INSTALL
+EOF
+done <<EOF
+$package_naming
+EOF
 
 eval "x${installer} \"${updated_list}\""
 
