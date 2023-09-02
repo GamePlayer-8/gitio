@@ -8,7 +8,6 @@ steps:
 
     commands:
       - sh worker.sh
-      - DIR="$(pwd)" gitio process
       - DIR="$(pwd)" PAGES="pages" gitio branch
       - DIR="$(pwd)" TAG="latest" gitio container
 

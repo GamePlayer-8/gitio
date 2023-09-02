@@ -53,7 +53,7 @@ system_environment() {
 }
 
 app_installer() {
-    sh "$INSTALLER" tar gzip git openssh jq curl gawk coreutils expect
+    sh "$INSTALLER" tar gzip git openssh jq curl gawk coreutils
 }
 
 xssh() {
@@ -111,8 +111,7 @@ checkout() {
 }
 
 container() {
-    while IFS=' ' read -r element
-    do
+    for element in $CMD; do
         if ! [[ $element == *":"* ]]; then
             echo 'Missing data syntax in '"$element"'. Exiting...'
             exit 1
@@ -121,9 +120,7 @@ container() {
 $element
 EOF
         export "$name=$value"
-    done <<EOF
-$CMD
-EOF
+    done
 
     if ! [ -f "/tmp/kaniko.ci" ]; then
         sh "$INSTALLER" make go docker
@@ -156,8 +153,7 @@ EOF
 }
 
 branch() {
-    while IFS=' ' read -r element
-    do
+    for element in $CMD; do
         if ! [[ $element == *":"* ]]; then
             echo 'Missing data syntax in '"$element"'. Exiting...'
             exit 1
@@ -166,9 +162,7 @@ branch() {
 $element
 EOF
         export "$name=$value"
-    done <<EOF
-$CMD
-EOF
+    done
 
     git config --global credential.helper store
     git config --global user.name "$GIT_USERNAME"

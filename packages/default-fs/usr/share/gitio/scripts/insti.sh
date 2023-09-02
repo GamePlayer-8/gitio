@@ -95,32 +95,31 @@ get_installer() {
     esac
 }
 
-installer="$(get_installer "$os")"
+installer='apt'  # "$(get_installer "$os")"
 
 updated_list=""
 
-while IFS=' ' read -r parts; do
-    IFS=':' read -r installer_type orig_pkg pkg <<EOF
+for xpackage in $INSTALL; do
+    lastly=""
+    for parts in $package_naming; do
+        IFS=':' read -r installer_type orig_pkg pkg <<EOF
 $parts
 EOF
-    while IFS=' ' read -r xpackage; do
+    
         if [ "$installer" = "$installer_type" ]; then
-            
                 if [ "$xpackage" = "$orig_pkg" ]; then
                     updated_list="${updated_list}${pkg} "
-                else
-                    updated_list="${updated_list}${xpackage} "
+                    lastly="${pkg}"
+                    break
                 fi
-            
         else
             updated_list="${updated_list}${xpackage} "
         fi
-    done <<EOF
-$INSTALL
-EOF
-done <<EOF
-$package_naming
-EOF
+    
+    done
+    if ! [ "$lastly" = "${pkg}" ]; then
+        updated_list="${updated_list}${xpackage} "
+    fi
+done
 
 eval "x${installer} \"${updated_list}\""
-
