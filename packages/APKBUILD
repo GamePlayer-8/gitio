@@ -4,10 +4,10 @@ pkgver=0 # rolling
 pkgrel=0
 pkgdesc="Frontend API for interacting with git hosting for CI."
 url="https://gameplayer-8.codeberg.page/gitio"
-arch="x86_64"
+arch="noarch"
 license="Akini 3.1"
 depends="tar gzip git curl gawk coreutils"
-makedepends="apk"
+makedepends=""
 install=""
 subpackages=""
 source="https://gameplayer-8.codeberg.page/gitio/packages/zst/pkg.tar.gz"
@@ -16,11 +16,12 @@ optdepends="openssh: Git over SSH.
             kaniko: Building containers."
 
 build() {
-    cd "$srcdir/pkg"
+    echo 'Build clean.'
 }
 
 package() {
-    cd "$srcdir/pkg"
+    cd src
+    mkdir -p "$pkgdir"
     mv default-fs/* "$pkgdir/"
     chmod +x "$pkgdir/usr/bin/gitio"
 }

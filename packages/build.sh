@@ -39,10 +39,11 @@ build_apk() {
     sh "$INSTALLER" sudo
     adduser -D -G abuild abuild
     chown -R abuild "$SCRIPT_PATH"/apk
-    sudo -u abuild abuild-keygen -a
-    sudo -u abuild abuild -r
+    sudo -u abuild abuild-keygen -a -n -q
+    sudo -u abuild abuild checksum
+    sudo -u abuild abuild -r -m
     cd "$SCRIPT_PATH"
-    mv "$SCRIPT_PATH"/apk/pkg/* gitio.apk
+    mv /home/abuild/packages/pkg/x86_64/*.apk gitio.apk
     rm -rf apk
     chown root:root gitio.apk
 }
