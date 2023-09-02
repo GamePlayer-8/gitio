@@ -4,7 +4,7 @@ when:
 
 steps:
   main:
-    image: ubuntu
+    image: alpine
 
     commands:
       - sh worker.sh
