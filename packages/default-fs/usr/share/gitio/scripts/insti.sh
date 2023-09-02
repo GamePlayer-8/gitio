@@ -100,7 +100,9 @@ installer="$(get_installer "$os")"
 updated_list=""
 
 while IFS=' ' read -r parts; do
-    IFS=':' read -r installer_type orig_pkg pkg <<< "$parts"
+    IFS=':' read -r installer_type orig_pkg pkg <<EOF
+$parts
+EOF
     while IFS=' ' read -r xpackage; do
         if [ "$installer" = "$installer_type" ]; then
             
