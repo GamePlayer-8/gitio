@@ -181,7 +181,7 @@ Currently Arch based & Debian based distros are supported.
 
 ### AUR
 
-`yay -S gitio-chimmie`
+`yay -S gitio-git`
 
 # Contributing
 
