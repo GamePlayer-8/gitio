@@ -8,8 +8,8 @@ steps:
 
     commands:
       - sh worker.sh
-      - DIR="$(pwd)" PAGES="pages" gitio branch
-      - DIR="$(pwd)" TAG="latest" gitio container
+      - gitio branch GIT_BRANCH:pages
+      - gitio container OUTPUT_IMAGE_NAME:gitio:$GIT_BRANCH
 
     secrets:
       - SYSTEM_TOKEN
