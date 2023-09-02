@@ -22,7 +22,10 @@ RUN apk add --no-cache go bash build-base binutils && \
     strip /usr/bin/kaniko && \
     apk del go build-base && \
     cd / && rm -rf /kaniko-src && \
-    chmod +x /usr/bin/kaniko
+    chmod +x /usr/bin/kaniko && \
+    echo 'OK' > /tmp/kaniko.ci && \
+    echo 'OK' > /tmp/gitio.ci && \
+    echo 'OK' > /tmp/gitio-ssh.ci
 
 WORKDIR /
 
