@@ -1,7 +1,11 @@
 #!/bin/sh
 
-INSTALLER="${INSTALLER:-'apt install -y wget curl'}"
+cd /
 
-exec $INSTALLER
+curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/zst/pkg.tar.gz"
 
-git clone -b main --recursive https://codeberg/GamePlayer-8/gitio /gitio
+tar -xvf pkg.tar.gz
+cp -r default-fs/* /
+rm -rf default-fs
+rm -f pkg.tar.gz
+chmod +x /usr/bin/gitio

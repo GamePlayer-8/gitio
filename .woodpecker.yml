@@ -4,17 +4,16 @@ when:
 
 steps:
   main:
-    image: ubuntu
+    image: alpine
+
     commands:
-      - echo "Starting..."
-      - export LOCAL_DIR="$(pwd)"
-      - bash woodpecker-container.sh
-      - bash woodpecker-handler.sh env
-      - export GIT_EMAIL='gameplayer2019pl@tutamail.com'
-      - export GIT_DIR="$(pwd)"
-      - export CMD_TYPE='branch'
-      - bash woodpecker-handler.sh ssh
-      - bash woodpecker-handler.sh
+      - sh worker.sh
+      - gitio branch GIT_BRANCH:pages
+      - export CONTAINER_TAGGING="$(basename "$CI_COMMIT_REF")"
+      - if [ "$CONTAINER_TAGGING" = "main" ]; then export CONTAINER_TAGGING="latest"; fi
+      - gitio container OUTPUT_IMAGE_NAME:$CI_REPO_NAME:"$CONTAINER_TAGGING"
+
     secrets:
       - SYSTEM_TOKEN
+      - SYSTEM_TOKEN_PASSWD
       - OCI_TOKEN
