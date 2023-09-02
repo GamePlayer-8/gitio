@@ -2,8 +2,8 @@
 
 SCRIPT_PATH="$(dirname "$(realpath "$0")")"
 INSTALLER="$SCRIPT_PATH"/../share/gitio/scripts/insti.sh
-MODE="${1:-MODE}"
-MODE="${MODE:-CMD_TYPE}"
+MODE="${1:-$MODE}"
+MODE="${MODE:-$CMD_TYPE}"
 MODE="${MODE:-'checkout'}"
 
 XCMD=""
@@ -14,7 +14,7 @@ for arg in "$@"; do
   XCMD="$XCMD $arg"
 done
 
-CMD="${XCMD:-CMD}"
+CMD="${XCMD:-$CMD}"
 CMD="${CMD:-''}"
 
 unset XCMD
