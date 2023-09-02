@@ -22,30 +22,8 @@ runs:
   args:
     - ${{ inputs.type }}
     - ${{ inputs.cmd }}
+
   steps:
-    - name: Setup Wizard
-      run: |
-          echo "DEBIAN_FRONTEND=noninteractive" >> $GITHUB_ENV
-          echo 'TZ="Europe/Warsaw"' >> $GITHUB_ENV
-          echo "LOCAL_DIR=$(pwd)" >> $GITHUB_ENV
-          echo "GIT_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          echo "GIT_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-          echo "GIT_PROJECT_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
-          echo "GIT_USERNAME=${{ github.repository_owner }}" >> $GITHUB_ENV
-          echo "GIT_REPO=${{ github.repository }}" >> $GITHUB_ENV
-          echo "GIT_HOST='github.com'" >> $GITHUB_ENV
-
-    - name: Setup Wizard - Domains
-      run: |
-          echo "GIT_DOMAIN=$(sh /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
-          echo "GIT_WEBPAGE=https://$(sh /gitio-scripts/get_gh_domain.sh)" >> $GITHUB_ENV
-
-    - name: Setup Wizard - Inputs
-      run: |
-          echo "CMD_TYPE=${{ inputs.type }}" >> $GITHUB_ENV
-          echo "CMD=${{ inputs.cmd }}" >> $GITHUB_ENV
-
-    - name: Start runtime
-      run: |
-          sh /gitio-runtime.sh
-
+      - name: Runtime
+        run: |
+          CMD_TYPE="${{ inputs.type }}" CMD="${{ inputs.cmd }}" gitio

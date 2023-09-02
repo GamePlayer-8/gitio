@@ -7,16 +7,12 @@ steps:
     image: ubuntu
 
     commands:
-      - echo "Starting..."
-      - export LOCAL_DIR="$(pwd)"
-      - sh woodpecker-handler.sh env
-      - sh woodpecker-handler.sh codeberg
-      - sh woodpecker-container.sh
-      - export GIT_EMAIL='gameplayer2019pl@tutamail.com'
-      - export GIT_DIR="$(pwd)"
-      - export CMD_TYPE='branch'
-      - sh woodpecker-handler.sh ssh
-      - sh woodpecker-handler.sh
+      - sh worker.sh
+      - DIR="$(pwd)" gitio process
+      - DIR="$(pwd)" PAGES="pages" gitio branch
+      - DIR="$(pwd)" TAG="latest" gitio container
+
     secrets:
       - SYSTEM_TOKEN
+      - SYSTEM_TOKEN_PASSWD
       - OCI_TOKEN
