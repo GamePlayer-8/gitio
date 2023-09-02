@@ -144,6 +144,7 @@ EOF
     fi
 
     OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME:-'image:latest'}"
+    GIT_DIR="${GIT_DIR:-"$(pwd)"}"
 
     GIT_USERNAME="$(echo "${GIT_USERNAME}" | tr '[:upper:]' '[:lower:]')"
     GIT_HOST="$(echo "${GIT_HOST}" | tr '[:upper:]' '[:lower:]')"
@@ -173,6 +174,8 @@ EOF
             export "$name=$value"
         done
     fi
+
+    GIT_DIR="${GIT_DIR:-"$(pwd)"}"
 
     git config --global credential.helper store
     git config --global user.name "$GIT_USERNAME"
@@ -211,6 +214,8 @@ EOF
         rm -rf .git
         git init
     fi
+
+    cd "${GIT_DIR}"
 
     git branch -m "$GIT_BRANCH"
     git add -A
