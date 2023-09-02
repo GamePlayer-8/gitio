@@ -14,14 +14,14 @@ RUN apk add --no-cache tar gzip git openssh jq curl gawk coreutils
 RUN apk add --no-cache docker
 
 # Build Kaniko
-RUN apk add --no-cache go bash build-base && \
+RUN apk add --no-cache go bash build-base binutils && \
     git clone --recursive https://github.com/GoogleContainerTools/kaniko /kaniko-src && \
     cd /kaniko-src && \
     make && \
     mv out/executor /usr/bin/kaniko && \
+    strip /usr/bin/kaniko && \
     apk del go build-base && \
     cd / && rm -rf /kaniko-src /kaniko && \
-    strip /usr/bin/kaniko && \
     chmod +x /usr/bin/kaniko
 
 WORKDIR /
