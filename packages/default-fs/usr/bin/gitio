@@ -219,7 +219,8 @@ EOF
 
     git branch -m "$GIT_BRANCH"
     git add -A
-    git commit -m "BRANCH synchronization at $(date +%Y-%m-%d)"
+    echo 'ERR'
+    git commit -m "$GIT_BRANCH synchronization at $(date +%Y-%m-%d)"
 
     git remote remove origin 2>/dev/null 3>&2
     git remote add origin "$url"
