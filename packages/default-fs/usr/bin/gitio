@@ -146,7 +146,7 @@ EOF
     fi
 
     OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME:-'image:latest'}"
-    GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
+    export GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
 
     GIT_USERNAME="$(echo "${GIT_USERNAME}" | tr '[:upper:]' '[:lower:]')"
     GIT_HOST="$(echo "${GIT_HOST}" | tr '[:upper:]' '[:lower:]')"
@@ -155,6 +155,7 @@ EOF
     echo "${GIT_TOKEN}" | docker login "${GIT_HOST}" -u "${GIT_USERNAME}" --password-stdin
 
     cd "${GIT_WORKDIR}"
+    echo "${GIT_WORKDIR}"
 
     kaniko --context . --dockerfile . --destination "${GIT_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
 
@@ -177,7 +178,7 @@ EOF
         done
     fi
 
-    GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
+    export GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
 
     git config --global credential.helper store
     git config --global user.name "$GIT_USERNAME"
