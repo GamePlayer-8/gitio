@@ -101,6 +101,7 @@ if ! [ -z "$SYSTEM_TOKEN" ]; then
 fi
 
 checkout() {
+    echo '[CHECKOUT]'
     if [ -z "$SYSTEM_TOKEN" ]; then
         url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_USERNAME"'/'"$GIT_REPO"
     else
@@ -111,8 +112,9 @@ checkout() {
 }
 
 container() {
+    echo '[CONTAINER]'
+    echo "$CMD"
     for element in $CMD; do
-        echo "$CMD"
         if ! [ -z "${element##*:*}" ]; then
             echo 'Missing data syntax in '"$element"'. Exiting...'
             exit 1
@@ -154,8 +156,10 @@ EOF
 }
 
 branch() {
+    echo '[BRANCH]'
+    echo "$CMD"
     for element in $CMD; do
-        if ! [[ $element == *":"* ]]; then
+        if ! [ -z "${element##*:*}" ]; then
             echo 'Missing data syntax in '"$element"'. Exiting...'
             exit 1
         fi
