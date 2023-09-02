@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: gameplayer-8/gitio@v1
+        uses: gameplayer-8/gitio@v2
 ```
 
 ### Advanced options
@@ -60,7 +60,7 @@ Checkout with `git clone` advanced functionality:
 
 ```yaml
 - name: Checkout
-  uses: gameplayer-8/gitio@v1
+  uses: gameplayer-8/gitio@v2
   with:
     type: 'checkout'
     cmd: '--recursive -b gh-pages'
@@ -84,7 +84,7 @@ Branch upload:
 
 ```yaml
 - name: Upload branch to gh-pages
-  uses: gameplayer-8/gitio@v1
+  uses: gameplayer-8/gitio@v2
   with:
     type: 'branch'
     cmd: 'GIT_WORKDIR:/home/github/pages GIT_EMAIL:user@gmail.com'
@@ -107,7 +107,7 @@ Container publishment:
 
 ```yaml
 - name: Upload branch to gh-pages
-  uses: gameplayer-8/gitio@v1
+  uses: gameplayer-8/gitio@v2
   with:
     type: 'container'
     cmd: 'OUTPUT_IMAGE_NAME:alpine:latest GIT_WORKDIR:.'
