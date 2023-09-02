@@ -21,7 +21,7 @@ RUN apk add --no-cache go bash build-base binutils && \
     mv out/executor /usr/bin/kaniko && \
     strip /usr/bin/kaniko && \
     apk del go build-base && \
-    cd / && rm -rf /kaniko-src /kaniko && \
+    cd / && rm -rf /kaniko-src && \
     chmod +x /usr/bin/kaniko
 
 WORKDIR /
