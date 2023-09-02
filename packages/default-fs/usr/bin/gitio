@@ -7,7 +7,9 @@ MODE="${MODE:-$CMD_TYPE}"
 MODE="${MODE:-'checkout'}"
 
 XCMD=""
-shift  # Shift to remove the first argument (the script name)
+if ! [ "$1" == "" ]; then
+    shift  # Shift to remove the first argument (the script name)
+fi
 
 # Loop through the remaining arguments
 for arg in "$@"; do
@@ -208,10 +210,11 @@ EOF
         mv "$GIT_BRANCH"/.git "$(basename "$GIT_DIR")"/
 
         rm -rf "$GIT_BRANCH"
-        cd "$(basename "$GIT_DIR")"
+        cd "$GIT_DIR"
     else
-        cd "$(basename "$GIT_DIR")"
+        cd "$GIT_DIR"
         rm -rf .git
+        mkdir .git
         git init
     fi
 
