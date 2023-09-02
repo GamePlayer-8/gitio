@@ -52,7 +52,7 @@ system_environment() {
     export GIT_DOMAIN="$CI_REPO_OWNER"'.'"$GIT_HOST"
     export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
     export GIT_EMAIL='example@example.com'
-    export GIT_DIR="$(pwd)"
+    export GIT_WORKDIR="$(pwd)"
 }
 
 app_installer() {
@@ -146,7 +146,7 @@ EOF
     fi
 
     OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME:-'image:latest'}"
-    GIT_DIR="${GIT_DIR:-"$(pwd)"}"
+    GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
 
     GIT_USERNAME="$(echo "${GIT_USERNAME}" | tr '[:upper:]' '[:lower:]')"
     GIT_HOST="$(echo "${GIT_HOST}" | tr '[:upper:]' '[:lower:]')"
@@ -154,7 +154,7 @@ EOF
 
     echo "${GIT_TOKEN}" | docker login "${GIT_HOST}" -u "${GIT_USERNAME}" --password-stdin
 
-    cd "${GIT_DIR}"
+    cd "${GIT_WORKDIR}"
 
     kaniko --context . --dockerfile . --destination "${GIT_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
 
@@ -177,7 +177,7 @@ EOF
         done
     fi
 
-    GIT_DIR="${GIT_DIR:-"$(pwd)"}"
+    GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
 
     git config --global credential.helper store
     git config --global user.name "$GIT_USERNAME"
@@ -195,7 +195,7 @@ EOF
 
     echo 'EXIT CODE '"$http_response"
 
-    cd "$(dirname "$GIT_DIR")"
+    cd "$(dirname "$GIT_WORKDIR")"
 
     if [ -z "$SYSTEM_TOKEN" ]; then
         url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_REPO"
@@ -206,19 +206,18 @@ EOF
     if [ $http_response -eq 200 ]; then
         git clone -b "$GIT_BRANCH" "$url" "$GIT_BRANCH"
 
-        rm -rf "$(basename "$GIT_DIR")"/.git
-        mv "$GIT_BRANCH"/.git "$(basename "$GIT_DIR")"/
+        rm -rf "$(basename "$GIT_WORKDIR")"/.git
+        mv "$GIT_BRANCH"/.git "$(basename "$GIT_WORKDIR")"/
 
         rm -rf "$GIT_BRANCH"
-        cd "$GIT_DIR"
+        cd "$GIT_WORKDIR"
     else
-        cd "$GIT_DIR"
+        cd "$GIT_WORKDIR"
         rm -rf .git
-        mkdir .git
-        git init .git
+        git init
     fi
 
-    cd "${GIT_DIR}"
+    cd "${GIT_WORKDIR}"
 
     git add -A
     git commit -m "$GIT_BRANCH synchronization at $(date +%Y-%m-%d)"
