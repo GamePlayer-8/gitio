@@ -15,12 +15,12 @@ RUN apk add --no-cache docker
 
 # Build Kaniko
 RUN apk add --no-cache go bash build-base && \
-    git clone --recursive https://github.com/GoogleContainerTools/kaniko /kaniko && \
-    cd /kaniko && \
+    git clone --recursive https://github.com/GoogleContainerTools/kaniko /kaniko-src && \
+    cd /kaniko-src && \
     make && \
     mv out/executor /usr/bin/kaniko && \
     apk purge go build-base && \
-    cd / && rm -rf kaniko && \
+    cd / && rm -rf /kaniko-src /kaniko && \
     strip /usr/bin/kaniko && \
     chmod +x /usr/bin/kaniko
 
