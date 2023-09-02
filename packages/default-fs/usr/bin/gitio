@@ -192,9 +192,9 @@ EOF
     cd "$(dirname "$GIT_DIR")"
 
     if [ -z "$SYSTEM_TOKEN" ]; then
-        url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_USERNAME"'/'"$GIT_REPO"
+        url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_REPO"
     else
-        url='git@'"$GIT_HOST"':'"$GIT_USERNAME"'/'"$GIT_REPO"'.git'
+        url='git@'"$GIT_HOST"':'"$GIT_REPO"'.git'
     fi
 
     if [ $http_response -eq 200 ]; then
