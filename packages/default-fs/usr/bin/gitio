@@ -50,6 +50,7 @@ system_environment() {
     export GIT_DOMAIN="$CI_REPO_OWNER"'.'"$GIT_HOST"
     export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
     export GIT_EMAIL='example@example.com'
+    export GIT_DIR="$(pwd)"
 }
 
 app_installer() {
@@ -152,7 +153,7 @@ EOF
 
     cd "${GIT_DIR}"
 
-    kaniko --context . --dockerfile ./Dockerfile --destination "${GIT_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
+    kaniko --context . --dockerfile . --destination "${GIT_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
     
     exit $?
 }
