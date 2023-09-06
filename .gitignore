@@ -4,3 +4,5 @@ packages/deb/*
 packages/*.deb
 packages/*.apk
 index.html
+documentation/*.html
+documentation/*.tmp

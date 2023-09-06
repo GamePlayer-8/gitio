@@ -8,7 +8,7 @@ INSTALLER="$SCRIPT_PATH"/packages/default-fs/usr/share/gitio/scripts/insti.sh
 sh "$SCRIPT_PATH"/packages/build.sh
 rm -rf "$SCRIPT_PATH"/.gitignore
 
-sh "$INSTALLER" markdown
+sh "$INSTALLER" markdown sed
 
 echo '<!DOCTYPE html>' > index.html
 echo '<html lang="en-US">' >> index.html
@@ -20,6 +20,8 @@ markdown README.md >> index.html
 echo '</div>' >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
+
+sh "$SCRIPT_PATH"/documentation/render.sh
 
 cd "$SCRIPT_PATH"
 sh install.sh
