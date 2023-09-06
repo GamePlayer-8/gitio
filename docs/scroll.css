@@ -21,18 +21,5 @@
 /* For Mozilla-based browsers */
 html {
     scrollbar-width: thin;
-    scrollbar-color: #ffd500 #ffffff;
-}
-
-html::-moz-scrollbar {
-    width: 10px;
-}
-
-html::-moz-scrollbar-track {
-    background-color: #ffffff;
-}
-
-html::-moz-scrollbar-thumb {
-    background-color: #ffd500;
-    border-radius: 5px;
+    scrollbar-color: #ffd500 #ffffff00;
 }
