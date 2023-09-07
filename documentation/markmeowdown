@@ -1,6 +1,7 @@
 #!/bin/sh
 # Maintainer: Chimmie Firefly
 
+RANDOM_WORDS="meow nya mrow mraw mrap nya~ nyaaa mew mlem blep blap gay"
 
 # Check if the user provided a Markdown file as an argument
 if [ $# -ne 1 ]; then
@@ -33,7 +34,50 @@ convert_special_characters() {
     line="$(echo "$line" | sed -E 's/\[([^\]]+)\]\(([^)]+)\)/<a href="\2">\1<\/a>/g')"
     # Convert Markdown images to HTML images
     line="$(echo "$line" | sed -E 's/!\[([^\]]+)\]\(([^)]+)\)/<img src="\2" alt="\1">/g')"
+    # Meow
+    line="$(echo "$line" | sed -E 's/na/nya/g; s/no/nyo/g')"
     echo "$line"
+}
+
+# Function to get a random word from `RANDOM_WORDS`
+get_random_word() {
+    # Count the number of words in the list
+    local num_words=$(echo "$RANDOM_WORDS" | wc -w)
+
+    local random_byte=$(od -An -N1 -i /dev/urandom)
+    # Generate a random number within the range of the number of words
+    local random_number=$((random_byte % $num_words))
+
+    # Use a loop to get the random word
+    local random_word=""
+    local count=0
+    for word in $RANDOM_WORDS; do
+        if [ $count -eq $random_number ]; then
+            random_word="$word"
+            break
+        fi
+        count=$((count + 1))
+    done
+
+    echo "$random_word"
+}
+
+# Function to insert random word at a random position in the magic_string
+insert_randomly() {
+    local input_string="$1"
+    local num_words=$(echo "$input_string" | wc -w)
+    local random_byte=$(od -An -N1 -i /dev/urandom)
+    local random_position=$((random_byte % (num_words + 1)))
+
+    if [ $random_position -eq 0 ]; then
+        local result="$input_string"
+    else
+        local before_random=$(echo "$input_string" | cut -d ' ' -f 1-$random_position)
+        local after_random=$(echo "$input_string" | cut -d ' ' -f $(($random_position + 1))-)
+        local result="${before_random} $(get_random_word) ${after_random}"
+    fi
+
+    echo "$result"
 }
 
 # Detect and convert code blocks to HTML code blocks
@@ -87,6 +131,15 @@ while IFS= read -r line; do
                     if [ "$in_ordered_list" ]; then
                         in_ordered_list=""
                         html_content="${html_content}</ol>"
+                    fi
+
+                    # Generate a random number between 0 and 1 (0 or 1)
+                    random_byte=$(od -An -N1 -i /dev/urandom)
+                    random_number=$((random_byte % 3))
+
+                    # Check if the random number is 1 (true) or 0 (false)
+                    if [ "$random_number" -eq 1 ]; then
+                        line="$(insert_randomly "$line")"
                     fi
 
                     # Convert other Markdown elements to HTML with special character conversion
