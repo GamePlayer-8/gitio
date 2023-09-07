@@ -33,6 +33,10 @@ A GitIO is an action for interacting with the git repository hosting & adds addi
 Documentation for great software developers or whoever the meow you are, is available 
 [here](https://gameplayer-8.codeberg.page/gitio/documentation/index.html).
 
+<br/>
+
+Documentation for cats is available [here](https://gameplayer-8.codeberg.page/gitio/documentation/home_cat.html).
+
 # Contributing
 
 All contributions are welcome! Expect a bit of mess tho.
