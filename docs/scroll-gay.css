@@ -5,21 +5,22 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: linear-gradient(#ffe18e, #b671ff);
+    background: #00000000;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(#fff19992, #9000ff);
+    background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+    transition: all 0.3s ease;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(#fdff8792, #6600b4);
+    background: linear-gradient(45deg, #9b0000, #964b00, #a3a300, #00a700, #000094, #4b0082, #4e008e);
 }
 
 /* For Mozilla-based browsers */
 html {
     scrollbar-width: thin;
-    scrollbar-color: #ffd500 #ffffff00;
+    scrollbar-color: #00ff11 #ffffff00;
 }
