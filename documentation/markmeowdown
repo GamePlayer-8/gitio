@@ -35,7 +35,7 @@ convert_special_characters() {
     # Convert Markdown images to HTML images
     line="$(echo "$line" | sed -E 's/!\[([^\]]+)\]\(([^)]+)\)/<img src="\2" alt="\1">/g')"
     # Meow
-    line="$(echo "$line" | sed -E 's/na/nya/g; s/no/nyo/g')"
+    line="$(echo "$line" | sed -E 's/na/nya/g; s/no/nyo/g; s/ma/mia/g; s/ I / Miau /g; s/may/miay/g; s/an/awa/g')"
     echo "$line"
 }
 
@@ -135,7 +135,7 @@ while IFS= read -r line; do
 
                     # Generate a random number between 0 and 1 (0 or 1)
                     random_byte=$(od -An -N1 -i /dev/urandom)
-                    random_number=$((random_byte % 3))
+                    random_number=$((random_byte % 2))
 
                     # Check if the random number is 1 (true) or 0 (false)
                     if [ "$random_number" -eq 1 ]; then

@@ -144,9 +144,15 @@ header {
 
 header * {
     margin: 5px;
-    color: #fff;
     padding: 0px;
     float: left;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+header *:hover {
+    color: #ffe571;
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.276);
 }
 
 header a {
