@@ -81,13 +81,35 @@ body::after {
 #content {
     background-image: linear-gradient(#75523a7c, #00000000);
     padding: 2%;
-    width: 100%;
+    width: 95%;
     height: auto;
     color: #ffffff;
     text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.276);
+    overflow-x: auto;
 }
 
 #content code {
+    color: #b5ff9f;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 1px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ffae0000;
+    box-shadow: 0px 4px 6px rgba(131, 93, 66, 0);
+    transition: all 0.3s ease;
+    white-space:pre-line;
+}
+
+#content pre {
+    overflow-x: auto;
+}
+
+#content pre code {
+    color: #fff;
+    display: inline-block; /* or inline-block */
+    width: auto;
+    overflow-x: auto;
     background-color: #00000057;
     padding: 5px;
     border-radius: 5px;
@@ -96,12 +118,7 @@ body::after {
     border-color: #ffae00;
     box-shadow: 0px 4px 6px rgba(131, 93, 66, 0.713);
     transition: all 0.3s ease;
-}
-
-#content pre code {
-    display: inline-block; /* or inline-block */
-    width: auto;
-    overflow-x: auto;
+    white-space: break-spaces;
 }
 
 #content pre code:hover {
@@ -111,7 +128,7 @@ body::after {
 
 #content code:hover {
     cursor: copy;
-    border-color: #00ff08;
+    color: #5fff5f;
 }
 
 #content hr {
@@ -120,6 +137,7 @@ body::after {
 
 #content li {
     padding: 5px;
+    padding-bottom: 10px;
 }
 
 #x {
