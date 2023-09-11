@@ -33,6 +33,9 @@ convert_special_characters() {
     line="$(echo "$line" | sed -E 's/\[([^\]]+)\]\(([^)]+)\)/<a href="\2">\1<\/a>/g')"
     # Convert Markdown images to HTML images
     line="$(echo "$line" | sed -E 's/!\[([^\]]+)\]\(([^)]+)\)/<img src="\2" alt="\1">/g')"
+    # Convert Markdown strikethrough text to HTML
+    line=$(echo "$line" | sed -E 's/~([^~]+)~/<s>\1<\/s>/g')
+    
     echo "$line"
 }
 
