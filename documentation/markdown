@@ -30,12 +30,12 @@ convert_special_characters() {
     # Convert Markdown italic text to HTML
     line="$(echo "$line" | sed -E 's/\*([^*]+)\*/<em>\1<\/em>/g')"
     # Convert Markdown anchors to HTML anchors
-    line="$(echo "$line" | sed -E 's/\[([^\]]+)\]\(([^)]+)\)/<a href="\2">\1<\/a>/g')"
+    line="$(echo "$line" | sed -E 's/\[([^]]+)\]\(([^)]+)\)/<a href="\2">\1<\/a>/g')"
     # Convert Markdown images to HTML images
     line="$(echo "$line" | sed -E 's/!\[([^\]]+)\]\(([^)]+)\)/<img src="\2" alt="\1">/g')"
     # Convert Markdown strikethrough text to HTML
     line=$(echo "$line" | sed -E 's/~([^~]+)~/<s>\1<\/s>/g')
-    
+
     echo "$line"
 }
 
