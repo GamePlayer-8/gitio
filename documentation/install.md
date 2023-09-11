@@ -18,11 +18,7 @@ based distros.
 
 `curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/gitio.apk"`
 
-## Arch
-
-`curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/PKGBUILD" && makepkg -si`
-
-### AUR
+## Arch AUR
 
 `yay -S gitio-git`
 
