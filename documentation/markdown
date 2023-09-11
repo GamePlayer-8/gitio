@@ -34,7 +34,7 @@ convert_special_characters() {
     # Convert Markdown images to HTML images
     line="$(echo "$line" | sed -E 's/!\[([^\]]+)\]\(([^)]+)\)/<img src="\2" alt="\1">/g')"
     # Convert Markdown strikethrough text to HTML
-    line=$(echo "$line" | sed -E 's/~([^~]+)~/<s>\1<\/s>/g')
+    line="$(echo "$line" | sed -E 's/~([^~]+)~/<s>\1<\/s>/g')"
 
     echo "$line"
 }
@@ -61,7 +61,7 @@ while IFS= read -r line; do
             code_block="<pre><code lang=\"$lang\">"
         else
             # Check if the line starts with '<' (preserving existing HTML elements)
-            if [[ "$line" == \<* ]]; then
+            if echo "$line" | grep -qE '^<'; then
                 html_content+="$line"
             else
                 # Detect Markdown headers and convert to HTML headers
@@ -96,11 +96,28 @@ while IFS= read -r line; do
                             html_content="${html_content}</ol>"
                         fi
 
-                        # Convert other Markdown elements to HTML with special character conversion
-                        line="$(convert_special_characters "$line")"
+                        # Check if the line starts with '<ELEMENT_NAME>' and continue capturing lines
+                        if echo "$line" | grep -qE '^<.*>'; then
+                            echo "Y"
+                            element_name="${BASH_REMATCH[0]}"
+                            in_element=true
+                            element_content=""
+                        elif [ "$in_element" = true ]; then
+                            # Check if the line starts with '</ELEMENT_NAME>' to close the element
+                            if echo "$line" | grep -qE '^<\/.*>'; then
+                                in_element=false
+                                html_content+="$element_name$element_content${BASH_REMATCH[0]}"
+                            else
+                                element_content+="$line\n"
+                            fi
+                        else
 
-                        # Append the line to HTML content
-                        html_content="${html_content}$line"
+                            # Convert other Markdown elements to HTML with special character conversion
+                            line="$(convert_special_characters "$line")"
+
+                            # Append the line to HTML content
+                            html_content="${html_content}$line"
+                        fi
                     fi
                 fi
             fi
