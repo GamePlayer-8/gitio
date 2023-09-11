@@ -62,7 +62,8 @@ while IFS= read -r line; do
         else
             # Check if the line starts with '<' (preserving existing HTML elements)
             if echo "$line" | grep -qE '^<'; then
-                html_content+="$line"
+                html_content+="
+$line"
             else
                 # Detect Markdown headers and convert to HTML headers
                 if echo "$line" | grep -qE '^#{1,6}[[:space:]]'; then
@@ -116,7 +117,8 @@ while IFS= read -r line; do
                             line="$(convert_special_characters "$line")"
 
                             # Append the line to HTML content
-                            html_content="${html_content}$line"
+                            html_content="${html_content}$line
+"
                         fi
                     fi
                 fi
