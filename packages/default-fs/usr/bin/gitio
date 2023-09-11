@@ -27,6 +27,13 @@ export DEBIAN_FRONTEND=noninteractive
 export TZ=UTC
 export LOCAL_DIR="$(pwd)"
 
+if [ "$MODE" == "" ] || [ "$MODE" == "help" ]; then
+    echo 'Usage:'
+    echo '   gitio <container/branch/checkout> <config>'
+    echo 'Look for full documentation at https://gameplayer-8.codeberg.page/gitio/documentation'
+    exit 0
+fi
+
 github_patch() {
     export CI_COMMIT_REF="$GITHUB_REF"
     export SYSTEM_TOKEN_PASSWD="$GITHUB_TOKEN"
