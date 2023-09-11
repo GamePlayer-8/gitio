@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: gameplayer-8/gitio@v2
+        uses: gameplayer-8/gitio@v4
 ```
 
 </details>

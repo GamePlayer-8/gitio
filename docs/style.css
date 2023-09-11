@@ -57,6 +57,10 @@ a {
 	text-decoration: none;
 }
 
+p * {
+	padding-bottom: 5px;
+}
+
 .hidden {
 	overflow: hidden;
 	visibility: hidden;

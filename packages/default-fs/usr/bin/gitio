@@ -27,6 +27,13 @@ export DEBIAN_FRONTEND=noninteractive
 export TZ=UTC
 export LOCAL_DIR="$(pwd)"
 
+if [ "$MODE" == "" ] || [ "$MODE" == "help" ]; then
+    echo 'Usage:'
+    echo '   gitio <container/branch/checkout> <config>'
+    echo 'Look for full documentation at https://gameplayer-8.codeberg.page/gitio/documentation'
+    exit 0
+fi
+
 github_patch() {
     export CI_COMMIT_REF="$GITHUB_REF"
     export SYSTEM_TOKEN_PASSWD="$GITHUB_TOKEN"
@@ -56,7 +63,7 @@ system_environment() {
 }
 
 app_installer() {
-    sh "$INSTALLER" tar gzip git curl gawk coreutils
+    sh "$INSTALLER" tar gzip git curl gawk coreutils >/dev/null
 }
 
 xssh() {
@@ -80,7 +87,7 @@ fi
 
 if ! [ -f /tmp/gitio-ssh.ci ]; then
     if [ "$OPENSSH" = "true" ]; then
-        sh "$INSTALLER" openssh
+        sh "$INSTALLER" openssh >/dev/null
         echo 'OK' > /tmp/gitio-ssh.ci
     fi
 fi
@@ -105,6 +112,7 @@ fi
 
 checkout() {
     echo '[CHECKOUT]'
+    echo "Fetching Remote repository ${GIT_REPO}..."
     if [ -z "$SYSTEM_TOKEN" ]; then
         url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_USERNAME"'/'"$GIT_REPO"
     else
@@ -116,7 +124,7 @@ checkout() {
 
 container() {
     echo '[CONTAINER]'
-    echo "$CMD"
+    echo "Building a container, using kaniko, with the following command line: $CMD"
     if ! [ "$CMD" = "NaN" ]; then
         for element in $CMD; do
             if ! [ -z "${element##*:*}" ]; then
@@ -131,9 +139,9 @@ EOF
     fi
 
     if ! [ -f "/tmp/kaniko.ci" ]; then
-        sh "$INSTALLER" make go docker bash
+        sh "$INSTALLER" make go docker bash >/dev/null
 
-        git clone --recursive https://github.com/GoogleContainerTools/kaniko /kaniko
+        git clone --recursive https://github.com/GoogleContainerTools/kaniko /kaniko >/dev/null
 
         cd /kaniko
 
@@ -164,6 +172,7 @@ EOF
 
 branch() {
     echo '[BRANCH]'
+    echo "Upload branch ${GIT_BRANCH} onto ${GIT_REPO}..."
     echo "$CMD"
     if ! [ "$CMD" = "NaN" ]; then
         for element in $CMD; do
@@ -194,7 +203,7 @@ EOF
         http_response=$(curl -s -o /dev/null -w "%{http_code}" -u "$GIT_USERNAME:$GIT_TOKEN" -X GET https://api.github.com/repos/"$GIT_USERNAME"/"$GIT_PROJECT_NAME"/branches/"$GIT_BRANCH")
     fi
 
-    echo 'EXIT CODE '"$http_response"
+    echo 'Resolve branch exit code: '"$http_response"
 
     cd "$(dirname "$GIT_WORKDIR")"
 
@@ -205,7 +214,7 @@ EOF
     fi
 
     if [ $http_response -eq 200 ]; then
-        git clone -b "$GIT_BRANCH" "$url" "$GIT_BRANCH"
+        git clone -b "$GIT_BRANCH" "$url" "$GIT_BRANCH" >/dev/null
 
         rm -rf "$(basename "$GIT_WORKDIR")"/.git
         mv "$GIT_BRANCH"/.git "$(basename "$GIT_WORKDIR")"/
@@ -215,13 +224,13 @@ EOF
     else
         cd "$GIT_WORKDIR"
         rm -rf .git
-        git init
+        git init >/dev/null
     fi
 
     cd "${GIT_WORKDIR}"
 
     git add -A
-    git commit -m "$GIT_BRANCH synchronization at $(date +%Y-%m-%d)"
+    git commit -m "$GIT_BRANCH synchronization at $(date +%Y-%m-%d)" >/dev/null
 
     git remote remove origin 2>/dev/null 3>&2
     git remote add origin "$url"

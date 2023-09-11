@@ -4,6 +4,10 @@
   </a>
 </p>
 
+<p align="center" class="no-highlight">
+  <a href="https://liberapay.com/chimmie/donate"><img alt=":donate:" src="https://liberapay.com/assets/widgets/donate.svg"></a>
+</p>
+
 <p align="center">
   <b>Codeberg</b>
 </p>
