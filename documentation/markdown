@@ -60,43 +60,48 @@ while IFS= read -r line; do
             in_code_block=true
             code_block="<pre><code lang=\"$lang\">"
         else
-            # Detect Markdown headers and convert to HTML headers
-            if echo "$line" | grep -qE '^#{1,6}[[:space:]]'; then
-                level=$(echo "$line" | grep -oE '^#{1,6}' | wc -c)
-                header_text=$(echo "$line" | sed -E 's/^#{1,6}[[:space:]](.+)/\1/')
-                html_content="${html_content}<h$level>$(convert_special_characters "$header_text")</h$level>"
+            # Check if the line starts with '<' (preserving existing HTML elements)
+            if [[ "$line" == \<* ]]; then
+                html_content+="$line"
             else
-                # Detect and convert Markdown lists to HTML lists
-                if echo "$line" | grep -qE '^[[:space:]]*- '; then
-                    item_text=$(echo "$line" | sed -E 's/^[[:space:]]*- (.+)/\1/')
-                    if [ -z "$in_unordered_list" ]; then
-                        in_unordered_list=true
-                        html_content="${html_content}<ul>"
-                    fi
-                    html_content="${html_content}<li>$(convert_special_characters "$item_text")</li>"
-                elif echo "$line" | grep -qE '^[[:space:]]*[0-9]+\.[[:space:]]'; then
-                    item_text=$(echo "$line" | sed -E 's/^[[:space:]]*[0-9]+\.[[:space:]](.+)/\1/')
-                    if [ -z "$in_ordered_list" ]; then
-                        in_ordered_list=true
-                        html_content="${html_content}<ol>"
-                    fi
-                    html_content="${html_content}<li>$(convert_special_characters "$item_text")</li>"
+                # Detect Markdown headers and convert to HTML headers
+                if echo "$line" | grep -qE '^#{1,6}[[:space:]]'; then
+                    level=$(echo "$line" | grep -oE '^#{1,6}' | wc -c)
+                    header_text=$(echo "$line" | sed -E 's/^#{1,6}[[:space:]](.+)/\1/')
+                    html_content="${html_content}<h$level>$(convert_special_characters "$header_text")</h$level>"
                 else
-                    # If no list item detected, close any open list tags
-                    if [ "$in_unordered_list" ]; then
-                        in_unordered_list=""
-                        html_content="${html_content}</ul>"
-                    fi
-                    if [ "$in_ordered_list" ]; then
-                        in_ordered_list=""
-                        html_content="${html_content}</ol>"
-                    fi
+                    # Detect and convert Markdown lists to HTML lists
+                    if echo "$line" | grep -qE '^[[:space:]]*- '; then
+                        item_text=$(echo "$line" | sed -E 's/^[[:space:]]*- (.+)/\1/')
+                        if [ -z "$in_unordered_list" ]; then
+                            in_unordered_list=true
+                            html_content="${html_content}<ul>"
+                        fi
+                        html_content="${html_content}<li>$(convert_special_characters "$item_text")</li>"
+                    elif echo "$line" | grep -qE '^[[:space:]]*[0-9]+\.[[:space:]]'; then
+                        item_text=$(echo "$line" | sed -E 's/^[[:space:]]*[0-9]+\.[[:space:]](.+)/\1/')
+                        if [ -z "$in_ordered_list" ]; then
+                            in_ordered_list=true
+                            html_content="${html_content}<ol>"
+                        fi
+                        html_content="${html_content}<li>$(convert_special_characters "$item_text")</li>"
+                    else
+                        # If no list item detected, close any open list tags
+                        if [ "$in_unordered_list" ]; then
+                            in_unordered_list=""
+                            html_content="${html_content}</ul>"
+                        fi
+                        if [ "$in_ordered_list" ]; then
+                            in_ordered_list=""
+                            html_content="${html_content}</ol>"
+                        fi
 
-                    # Convert other Markdown elements to HTML with special character conversion
-                    line="$(convert_special_characters "$line")"
+                        # Convert other Markdown elements to HTML with special character conversion
+                        line="$(convert_special_characters "$line")"
 
-                    # Append the line to HTML content
-                    html_content="${html_content}<p>$line</p>"
+                        # Append the line to HTML content
+                        html_content="${html_content}<p>$line</p>"
+                    fi
                 fi
             fi
         fi
