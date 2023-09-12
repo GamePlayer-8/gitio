@@ -15,7 +15,7 @@ RUN apk add --no-cache docker
 
 # Build Kaniko
 RUN apk add --no-cache go bash build-base binutils && \
-    git clone --recursive https://github.com/GoogleContainerTools/kaniko /kaniko-src && \
+    git clone --recursive https://codeberg.org/mirri/kaniko /kaniko-src && \
     cd /kaniko-src && \
     make && \
     mv out/executor /usr/bin/kaniko && \

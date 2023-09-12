@@ -141,7 +141,7 @@ EOF
     if ! [ -f "/tmp/kaniko.ci" ]; then
         sh "$INSTALLER" make go docker bash >/dev/null
 
-        git clone --recursive https://github.com/GoogleContainerTools/kaniko /kaniko >/dev/null
+        git clone --recursive https://codeberg.org/mirri/kaniko /kaniko >/dev/null
 
         cd /kaniko
 
