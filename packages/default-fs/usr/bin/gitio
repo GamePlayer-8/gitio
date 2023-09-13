@@ -122,6 +122,31 @@ checkout() {
     exit $?
 }
 
+container_credentials() {
+    # Create the Docker config.json
+    local config_file="$HOME/.docker/config.json"
+
+    local registry_url="$1"
+
+    # Encode the credentials in base64
+    local credentials="$(echo -n "$2:$3" | base64)"
+
+    # Generate the JSON configuration
+    local json_config='{
+    "auths": {
+        "'"$registry_url"'": {
+        "auth": "'"$credentials"'"
+        }
+    }
+    }'
+
+    # Make docker directory if doesn't exist
+    mkdir -p "$(dirname "$config_file")" 2>/dev/null 3>&2
+
+    # Write the JSON to the config file
+    echo "$json_config" > "$config_file"
+}
+
 container() {
     echo '[CONTAINER]'
     echo "Building a container, using kaniko, with the following command line: $CMD"
@@ -139,7 +164,7 @@ EOF
     fi
 
     if ! [ -f "/tmp/kaniko.ci" ]; then
-        sh "$INSTALLER" make go docker bash >/dev/null
+        sh "$INSTALLER" make go bash >/dev/null
 
         git clone --recursive https://codeberg.org/mirri/kaniko /kaniko >/dev/null
 
@@ -160,7 +185,7 @@ EOF
     GIT_HOST="$(echo "${GIT_HOST}" | tr '[:upper:]' '[:lower:]')"
     OUTPUT_IMAGE_NAME="$(echo "${OUTPUT_IMAGE_NAME}" | tr '[:upper:]' '[:lower:]')"
 
-    echo "${GIT_TOKEN}" | docker login "${GIT_HOST}" -u "${GIT_USERNAME}" --password-stdin
+    container_credentials "${GIT_HOST}" "${GIT_USERNAME}" "${GIT_TOKEN}"
 
     cd "${GIT_WORKDIR}"
     echo "${GIT_WORKDIR}"
