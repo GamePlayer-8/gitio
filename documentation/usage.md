@@ -100,7 +100,7 @@ Full list of environment variables for `cmd`:
 <summary>View usage for Codeberg</summary>
 
 Since Woodpecker CI lacks in action functionality,
-you would need to execute `curl https://gameplayer-8.codeberg.page/gitio/get.sh | sh`.
+you would need to execute `curl https://gitio.chimmie.k.vu/get.sh | sh`.
 <br/>
 
 Usage in the workflow:
@@ -114,7 +114,7 @@ steps:
   main:
     image: codeberg.org/gameplayer-8/gitio
     commands:
-      - curl https://gameplayer-8.codeberg.page/gitio/get.sh | sh
+      - curl https://gitio.chimmie.k.vu/get.sh | sh
       - gitio branch GIT_BRANCH:pages
       - gitio container OUTPUT_IMAGE_NAME:$CI_REPO_NAME:$(basename "$CI_COMMIT_REF")
     secrets:

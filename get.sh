@@ -2,7 +2,7 @@
 
 cd /
 
-curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/zst/pkg.tar.gz"
+curl -LO "https://gitio.chimmie.k.vu/packages/zst/pkg.tar.gz"
 
 tar -xvf pkg.tar.gz
 cp -r default-fs/* /

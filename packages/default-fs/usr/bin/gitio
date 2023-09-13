@@ -30,7 +30,7 @@ export LOCAL_DIR="$(pwd)"
 if [ "$MODE" == "" ] || [ "$MODE" == "help" ]; then
     echo 'Usage:'
     echo '   gitio <container/branch/checkout> <config>'
-    echo 'Look for full documentation at https://gameplayer-8.codeberg.page/gitio/documentation'
+    echo 'Look for full documentation at https://gitio.chimmie.k.vu/documentation'
     exit 0
 fi
 
