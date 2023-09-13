@@ -140,6 +140,9 @@ container_credentials() {
     }
     }'
 
+    # Make docker directory if doesn't exist
+    mkdir -p "$(dirname "$config_file")" 2>/dev/null 3>&2
+
     # Write the JSON to the config file
     echo "$json_config" > "$config_file"
 }
