@@ -29,26 +29,6 @@ build_zst() {
     sha256sum zst/pkg.tar.gz > zst.sha256.txt
 }
 
-build_apk() {
-    sh "${INSTALLER}" alpine-sdk
-    rm -rf "$SCRIPT_PATH"/apk
-    mkdir -p "$SCRIPT_PATH"/apk/src
-    mkdir "$SCRIPT_PATH"/apk/pkg
-    cd "$SCRIPT_PATH"/apk/src
-    cp "$SCRIPT_PATH"/APKBUILD .
-    sh "$INSTALLER" sudo
-    apk update
-    adduser -D -G abuild abuild
-    chown -R abuild "$SCRIPT_PATH"/apk
-    sudo -u abuild abuild-keygen -a -n -q
-    sudo -u abuild abuild checksum
-    sudo -u abuild abuild -r -m
-    cd "$SCRIPT_PATH"
-    find / -name 'gitio-*.apk' | xargs -I '{}' sh -c 'mv {} gitio.apk' 2>/dev/null 3>&2
-    rm -rf apk
-    chown root:root gitio.apk
-}
-
 prepare() {
     chmod +x "$SCRIPT_PATH"/default-fs/usr/bin/*
 }
@@ -56,4 +36,3 @@ prepare() {
 prepare
 build_deb
 build_zst
-build_apk

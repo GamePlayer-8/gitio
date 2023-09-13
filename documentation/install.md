@@ -16,7 +16,7 @@ based distros.
 
 ## Alpine
 
-`curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/gitio.apk"`
+`curl -LO "https://gitio.chimmie.k.vu/packages/gitio.apk"`
 
 ## Arch AUR
 
@@ -24,11 +24,11 @@ based distros.
 
 ## Debian
 
-`curl -LO "https://gameplayer-8.codeberg.page/gitio/packages/gitio.deb" && dpkg -i gitio.deb`
+`curl -LO "https://gitio.chimmie.k.vu/packages/gitio.deb" && dpkg -i gitio.deb`
 
 ## Custom Distribution
 
-`curl -LO https://gameplayer-8.codeberg.page/gitio/get.sh | sh`
+`curl -LO https://gitio.chimmie.k.vu/get.sh | sh`
 
 ### WARNING - Package Manager
 

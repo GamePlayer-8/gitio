@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: gameplayer-8/gitio@v6
+        uses: gameplayer-8/gitio@v7
 ```
 
 ### Advanced options
@@ -30,7 +30,7 @@ Checkout with `git clone` advanced functionality:
 
 ```yaml
 - name: Checkout
-  uses: gameplayer-8/gitio@v6
+  uses: gameplayer-8/gitio@v7
   with:
     type: 'checkout'
     cmd: '--recursive -b gh-pages'
@@ -54,7 +54,7 @@ Branch upload:
 
 ```yaml
 - name: Upload branch to gh-pages
-  uses: gameplayer-8/gitio@v6
+  uses: gameplayer-8/gitio@v7
   with:
     type: 'branch'
     cmd: 'GIT_WORKDIR:/home/github/pages GIT_EMAIL:user@gmail.com'
@@ -77,7 +77,7 @@ Container publishment:
 
 ```yaml
 - name: Upload branch to gh-pages
-  uses: gameplayer-8/gitio@v6
+  uses: gameplayer-8/gitio@v7
   with:
     type: 'container'
     cmd: 'OUTPUT_IMAGE_NAME:alpine:latest GIT_WORKDIR:.'
@@ -100,7 +100,7 @@ Full list of environment variables for `cmd`:
 <summary>View usage for Codeberg</summary>
 
 Since Woodpecker CI lacks in action functionality,
-you would need to execute `curl https://gameplayer-8.codeberg.page/gitio/get.sh | sh`.
+you would need to execute `curl https://gitio.chimmie.k.vu/get.sh | sh`.
 <br/>
 
 Usage in the workflow:
@@ -114,7 +114,7 @@ steps:
   main:
     image: codeberg.org/gameplayer-8/gitio
     commands:
-      - curl https://gameplayer-8.codeberg.page/gitio/get.sh | sh
+      - curl https://gitio.chimmie.k.vu/get.sh | sh
       - gitio branch GIT_BRANCH:pages
       - gitio container OUTPUT_IMAGE_NAME:$CI_REPO_NAME:$(basename "$CI_COMMIT_REF")
     secrets:
