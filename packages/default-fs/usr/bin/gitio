@@ -124,7 +124,7 @@ checkout() {
 
 container_credentials() {
     # Create the Docker config.json
-    local config_file="$HOME/.docker/config.json"
+    local config_file="/kaniko/.docker/config.json"
 
     local registry_url="$1"
 
@@ -185,11 +185,13 @@ EOF
     GIT_HOST="$(echo "${GIT_HOST}" | tr '[:upper:]' '[:lower:]')"
     OUTPUT_IMAGE_NAME="$(echo "${OUTPUT_IMAGE_NAME}" | tr '[:upper:]' '[:lower:]')"
 
+    echo "GIT_TOKEN: ${GIT_TOKEN}"
+
     container_credentials "${GIT_HOST}" "${GIT_USERNAME}" "${GIT_TOKEN}"
 
     cd "${GIT_WORKDIR}"
     echo "${GIT_WORKDIR}"
-
+    HOME="/kaniko"
     kaniko --context . --dockerfile ./Dockerfile --destination "${GIT_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
 
     exit $?
