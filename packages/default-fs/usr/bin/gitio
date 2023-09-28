@@ -145,6 +145,7 @@ container_credentials() {
 
     # Write the JSON to the config file
     echo "$json_config" > "$config_file"
+    chmod a-w "$config_file"
 }
 
 container() {
@@ -185,13 +186,11 @@ EOF
     GIT_HOST="$(echo "${GIT_HOST}" | tr '[:upper:]' '[:lower:]')"
     OUTPUT_IMAGE_NAME="$(echo "${OUTPUT_IMAGE_NAME}" | tr '[:upper:]' '[:lower:]')"
 
-    echo "GIT_TOKEN: ${GIT_TOKEN}"
-
     container_credentials "${GIT_HOST}" "${GIT_USERNAME}" "${GIT_TOKEN}"
 
     cd "${GIT_WORKDIR}"
     echo "${GIT_WORKDIR}"
-    HOME="/kaniko"
+    export HOME="/kaniko"
     kaniko --context . --dockerfile ./Dockerfile --destination "${GIT_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
 
     exit $?
