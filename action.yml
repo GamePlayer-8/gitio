@@ -1,0 +1,43 @@
+name: 'gitio-chimmie'
+description: 'An I/O for the Git server communication & builder.'
+author: 'Chimmie Firefly'
+
+branding:
+  icon: 'activity'
+  color: 'orange'
+
+inputs:
+  type:
+    description: 'Runtime I/O type.'
+    required: false
+    default: 'checkout'
+  cmd:
+    description: 'Commands for the I/O type.'
+    required: false
+    default: ''
+  wizard:
+    description: 'Setup GitHub variables automatically?'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.type }}
+    - ${{ inputs.cmd }}
+    - ${{ inputs.wizard }}
+
+  steps:
+      - name: Setup Wizard
+        run: |
+          if ! [ "${{ inputs.wizard }}" = "false" ]; then
+              echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+              echo "GITHUB_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+              echo "GITHUB_OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
+              echo "GITHUB_REPO=${{ github.repository }}" >> $GITHUB_ENV
+          fi
+
+      - name: Runtime
+        run: |
+          CMD_TYPE="${{ inputs.type }}" CMD="${{ inputs.cmd }}" gitio
