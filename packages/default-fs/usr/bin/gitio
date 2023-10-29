@@ -114,9 +114,9 @@ checkout() {
     echo '[CHECKOUT]'
     echo "Fetching Remote repository ${GIT_REPO}..."
     if [ -z "$SYSTEM_TOKEN" ]; then
-        url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_USERNAME"'/'"$GIT_REPO"
+        url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_REPO"
     else
-        url='git@'"$GIT_HOST"':'"$GIT_USERNAME"'/'"$GIT_REPO"'.git'
+        url='git@'"$GIT_HOST"':'"$GIT_REPO"'.git'
     fi
     git clone $CMD "$url"
     exit $?
