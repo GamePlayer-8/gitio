@@ -47,4 +47,4 @@ All contributions are welcome! Expect a bit of mess tho.
 
 # License
 
-[Akini License 3.1](LICENSE.txt)
+[Akini License 4.0](LICENSE.txt)
