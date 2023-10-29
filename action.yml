@@ -27,6 +27,10 @@ inputs:
     description: 'GitHub Ref'
     required: false
     default: ${{ github.ref }}
+  envdebug:
+    description: 'Display Environment'
+    required: false
+    default: 'false'
 
 runs:
   using: 'docker'
@@ -37,5 +41,6 @@ runs:
     GITHUB_TOKEN: ${{ inputs.token }}
     GITHUB_REPO: ${{ inputs.repository }}
     GITHUB_REF: ${{ inputs.ref }}
+    DEBUG_ENV: ${{ inputs.envdebug }}
   args:
     - gitio
