@@ -1,0 +1,27 @@
+# Maintainer: Chimmie Firefly <gameplayer2019pl@tutamail.com>
+pkgname=gitio
+pkgver=0 # rolling
+pkgrel=0
+pkgdesc="Frontend API for interacting with git hosting for CI."
+url="https://gitio.chimmie.k.vu"
+arch="noarch"
+license="Akini 3.1"
+depends="tar gzip git curl gawk coreutils"
+makedepends=""
+install=""
+subpackages=""
+source="https://gitio.chimmie.k.vu/packages/zst/pkg.tar.gz"
+
+optdepends="openssh: Git over SSH.
+            kaniko: Building containers."
+
+build() {
+    echo 'Build clean.'
+}
+
+package() {
+    cd src
+    mkdir -p "$pkgdir"
+    mv default-fs/* "$pkgdir/"
+    chmod +x "$pkgdir/usr/bin/gitio"
+}
