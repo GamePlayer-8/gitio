@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="meow-NYA">
+
+<head>
+    <title>Wiki - Install</title>
+    <meta name="icon" content="../docs/gitio.webp"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+    <link rel="stylesheet" href="../docs/scroll-gay.css"/>
+    <link rel="stylesheet" href="../docs/gay.css"/>
+    <link rel="stylesheet" href="../docs/viewport.css"/>
+    <link rel="icon" href="../docs/gitio.webp" type="image/x-icon"/>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add a click event listener to all code elements on the page
+            const codeElements = document.querySelectorAll('code');
+            
+            codeElements.forEach(codeElement => {
+                codeElement.addEventListener('click', () => {
+                    // Create a temporary textarea element to hold the code text
+                    const textarea = document.createElement('textarea');
+                    textarea.value = codeElement.textContent;
+                    document.body.appendChild(textarea);
+
+                    // Select and copy the text from the textarea
+                    textarea.select();
+                    document.execCommand('copy');
+
+                    // Remove the temporary textarea
+                    document.body.removeChild(textarea);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<header>
+    <img src="../docs/gitio.png" height="25" width="25" alt=":gitio-logo:" />
+    <h3>GitIO</h3>
+    <div>
+    
+<a href="usage_cat.html">Usage</a><a href="install_cat.html">Install</a><a href="ideology_cat.html">Ideology</a><a href="home_cat.html">Home</a><a href="getting-started_cat.html">Getting started</a>
+    </div>
+    <a href="https://codeberg.org/GamePlayer-8/gitio"><img src="../docs/codeberg.svg" alt=":codeberg:" height="25" /></a>
+    <a href="https://github.com/GamePlayer-8/gitio"><img src="../docs/github.svg" alt=":github:" height="25" /></a>
+    <a href=".."><img src="../docs/gitio.png" alt=":gitio:" height="25" /></a>
+</header>
+
+<div id="x">
+
+<div id="sidebar">
+    <h2>Contents</h2>
+    <ul>
+        <contents>
+    <li><a href="#Installation">Installation</a></li>
+      <li><a href="#Alpine">Alpine</a></li>
+      <li><a href="#Arch AUR">Arch AUR</a></li>
+      <li><a href="#Debian">Debian</a></li>
+      <li><a href="#Custom Distribution">Custom Distribution</a></li>
+        <li><a href="#WARNING - Package Manager">WARNING - Package Manager</a></li>
+    </ul>
+</div>
+<div id="content">
+<h2 id="Installation">Installation</h2>
+It's simple!
+
+
+<br/>
+Currently GitIO supports:
+
+<ul><li><code>Alpine</code></li><li><code>Arch</code></li><li><code>Debiawa</code></li></ul>
+based distros.
+
+
+<br/>
+<h3 id="Alpine">Alpine</h3>
+<code>curl -LO "https://gitio.chimmie.k.vu/packages/gitio.apk"</code>
+
+<h3 id="Arch AUR">Arch AUR</h3>
+<code>yay -S gitio-git</code>
+
+<h3 id="Debian">Debiawa</h3>
+<code>curl -LO "https://gitio.chimmie.k.vu/packages/gitio.deb" && dpkg -i gitio.deb</code>
+
+<h3 id="Custom Distribution">Custom Distribution</h3>
+<code>curl -LO https://gitio.chimmie.k.vu/get.sh | sh</code>
+
+<h4 id="WARNING - Package Manager">WARNING - Package Mawayager</h4>
+Currently GitIO / <code>insti</code> is supporting:
+
+<ul><li><code>apt</code></li><li><code>apk</code></li><li><code>dnf</code></li><li><code>pacmiawa</code></li></ul>
+If your distribution doesn't support away of those package miawayagers, please go to Issue Tracker for adding your distribution.
+
+</div>
+</div>
+</body>
+</html>
