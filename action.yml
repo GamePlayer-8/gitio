@@ -1,0 +1,51 @@
+name: 'gitio-chimmie'
+description: 'An I/O for the Git server communication & builder.'
+author: 'Chimmie Firefly'
+
+branding:
+  icon: 'activity'
+  color: 'orange'
+
+inputs:
+  type:
+    description: 'Runtime I/O type.'
+    required: false
+    default: 'checkout'
+  cmd:
+    description: 'Commands for the I/O type.'
+    required: false
+    default: ''
+  token:
+    description: 'GitHub Access Token'
+    required: false
+    default: ${{ github.token }}
+  repository:
+    description: 'GitHub Repository Name'
+    required: false
+    default: ${{ github.repository }}
+  ref:
+    description: 'GitHub Ref'
+    required: false
+    default: ${{ github.ref }}
+  sha:
+    description: 'GitHub SHA'
+    required: false
+    default: ${{ github.sha }}
+  envdebug:
+    description: 'Display Environment'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    CMD_TYPE: ${{ inputs.type }}
+    CMD: ${{ inputs.cmd }}
+    GITHUB_TOKEN: ${{ inputs.token }}
+    GITHUB_REPO: ${{ inputs.repository }}
+    GITHUB_REF: ${{ inputs.ref }}
+    GITHUB_SHA: ${{ inputs.sha }}
+    DEBUG_ENV: ${{ inputs.envdebug }}
+  args:
+    - gitio

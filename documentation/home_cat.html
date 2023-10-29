@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="meow-NYA">
+
+<head>
+    <title>Wiki - Home</title>
+    <meta name="icon" content="../docs/gitio.webp"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+    <link rel="stylesheet" href="../docs/scroll-gay.css"/>
+    <link rel="stylesheet" href="../docs/gay.css"/>
+    <link rel="stylesheet" href="../docs/viewport.css"/>
+    <link rel="icon" href="../docs/gitio.webp" type="image/x-icon"/>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add a click event listener to all code elements on the page
+            const codeElements = document.querySelectorAll('code');
+            
+            codeElements.forEach(codeElement => {
+                codeElement.addEventListener('click', () => {
+                    // Create a temporary textarea element to hold the code text
+                    const textarea = document.createElement('textarea');
+                    textarea.value = codeElement.textContent;
+                    document.body.appendChild(textarea);
+
+                    // Select and copy the text from the textarea
+                    textarea.select();
+                    document.execCommand('copy');
+
+                    // Remove the temporary textarea
+                    document.body.removeChild(textarea);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<header>
+    <img src="../docs/gitio.png" height="25" width="25" alt=":gitio-logo:" />
+    <h3>GitIO</h3>
+    <div>
+    
+<a href="usage_cat.html">Usage</a><a href="install_cat.html">Install</a><a href="ideology_cat.html">Ideology</a><a href="home_cat.html">Home</a><a href="getting-started_cat.html">Getting started</a>
+    </div>
+    <a href="https://codeberg.org/GamePlayer-8/gitio"><img src="../docs/codeberg.svg" alt=":codeberg:" height="25" /></a>
+    <a href="https://github.com/GamePlayer-8/gitio"><img src="../docs/github.svg" alt=":github:" height="25" /></a>
+    <a href=".."><img src="../docs/gitio.png" alt=":gitio:" height="25" /></a>
+</header>
+
+<div id="x">
+
+<div id="sidebar">
+    <h2>Contents</h2>
+    <ul>
+        <contents>
+    <li><a href="#Welcome to the GitIO wiki!">Welcome to the GitIO wiki!</a></li>
+    </ul>
+</div>
+<div id="content">
+<h2 id="Welcome to the GitIO wiki!">Welcome to the GitIO wiki!</h2>
+Here's the startup page of poorly documented software, because Miau don't feel like it miakes sense to miake it.
+
+
+<br/>
+Although people hates documentation in <code>README.md</code> so here we are.
+
+
+<br/>
+Above that miain content, nyaaa there's a nyavigation menu with type-specific stuff 
+while on the left - contents of already mraw opened file.
+
+
+<br/>
+Go to <code>Getting started</code> in order to start using blep GitIO for your workflow.
+
+</div>
+</div>
+</body>
+</html>
