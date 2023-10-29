@@ -1,0 +1,1 @@
+78584d04b3ebdeb9f84c0816e4c33cd90a571d6c2ff1bef069b662712ed443d9  /woodpecker/src/codeberg.org/GamePlayer-8/gitio/packages/gitio.deb
