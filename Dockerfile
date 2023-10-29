@@ -29,3 +29,10 @@ WORKDIR /
 COPY packages/default-fs/. .
 
 RUN chmod +x /usr/bin/gitio
+
+CMD ["sh", "-c", "CMD_TYPE=${{ inputs.type }}
+        CMD=${{ inputs.cmd }}
+        GITHUB_TOKEN=${{ inputs.token }}
+        GITHUB_REPO=${{ inputs.repository }}
+        GITHUB_REF=${{ inputs.ref }}
+        /usr/bin/gitio"]
