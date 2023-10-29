@@ -1,0 +1,197 @@
+#!/bin/sh
+# Maintainer: Chimmie Firefly
+
+RANDOM_WORDS="meow nya mrow mraw mrap nya~ nyaaa mew mlem blep blap gay"
+
+# Check if the user provided a Markdown file as an argument
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 input.md"
+    exit 1
+fi
+
+input_file="$1"
+
+# Check if the input file exists
+if [ ! -f "$input_file" ]; then
+    echo "Input file not found: $input_file"
+    exit 1
+fi
+
+# Initialize the HTML content
+#html_content="<html><head><title>Markdown to HTML</title></head><body>"
+html_content=""
+
+# Function to convert Markdown special characters to HTML
+convert_special_characters() {
+    local line="$1"
+    # Convert Markdown inline code to HTML
+    line="$(echo "$line" | sed -E 's/`([^`]+)`/<code>\1<\/code>/g')"
+    # Convert Markdown bold text to HTML
+    line="$(echo "$line" | sed -E 's/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g')"
+    # Convert Markdown italic text to HTML
+    line="$(echo "$line" | sed -E 's/\*([^*]+)\*/<em>\1<\/em>/g')"
+    # Convert Markdown anchors to HTML anchors
+    line="$(echo "$line" | sed -E 's/\[([^]]+)\]\(([^)]+)\)/<a href="\2">\1<\/a>/g')"
+    # Convert Markdown images to HTML images
+    line="$(echo "$line" | sed -E 's/!\[([^\]]+)\]\(([^)]+)\)/<img src="\2" alt="\1">/g')"
+    # Convert Markdown strikethrough text to HTML
+    line="$(echo "$line" | sed -E 's/~([^~]+)~/<s>\1<\/s>/g')"
+    # Meow
+    line="$(echo "$line" | sed -E 's/na/nya/g; s/no/nyo/g; s/ma/mia/g; s/ I / Miau /g; s/may/miay/g; s/an/awa/g')"
+    echo "$line"
+}
+
+# Function to get a random word from `RANDOM_WORDS`
+get_random_word() {
+    # Count the number of words in the list
+    local num_words=$(echo "$RANDOM_WORDS" | wc -w)
+
+    local random_byte=$(od -An -N1 -i /dev/urandom)
+    # Generate a random number within the range of the number of words
+    local random_number=$((random_byte % $num_words))
+
+    # Use a loop to get the random word
+    local random_word=""
+    local count=0
+    for word in $RANDOM_WORDS; do
+        if [ $count -eq $random_number ]; then
+            random_word="$word"
+            break
+        fi
+        count=$((count + 1))
+    done
+
+    echo "$random_word"
+}
+
+# Function to insert random word at a random position in the magic_string
+insert_randomly() {
+    local input_string="$1"
+    local num_words=$(echo "$input_string" | wc -w)
+    local random_byte=$(od -An -N1 -i /dev/urandom)
+    local random_position=$((random_byte % (num_words + 1)))
+
+    if [ $random_position -eq 0 ]; then
+        local result="$input_string"
+    else
+        local before_random=$(echo "$input_string" | cut -d ' ' -f 1-$random_position)
+        local after_random=$(echo "$input_string" | cut -d ' ' -f $(($random_position + 1))-)
+        local result="${before_random} $(get_random_word) ${after_random}"
+    fi
+
+    echo "$result"
+}
+
+# Detect and convert code blocks to HTML code blocks
+in_code_block=false
+code_block=""
+while IFS= read -r line; do
+    if [ "$in_code_block" = true ]; then
+        if [ "$line" = '```' ]; then
+            in_code_block=false
+            code_block="${code_block}</code></pre>"
+            html_content="${html_content}${code_block}"
+            code_block=""
+        else
+            code_block="${code_block}${line}
+"
+        fi
+    else
+        # Detect code block start and extract the language specifier
+        if echo "$line" | grep -q '^```[a-zA-Z]\{1,\}'; then
+            lang=$(echo "$line" | sed -n 's/^``` \?\([a-zA-Z]\{1,\}\).*$/\1/p')
+            in_code_block=true
+            code_block="<pre><code lang=\"$lang\">"
+        else
+            # Check if the line starts with '<' (preserving existing HTML elements)
+            if echo "$line" | grep -qE '^<'; then
+                html_content="${html_content}
+$line"
+            else
+                # Detect Markdown headers and convert to HTML headers
+                if echo "$line" | grep -qE '^#{1,6}[[:space:]]'; then
+                    level=$(echo "$line" | grep -oE '^#{1,6}' | wc -c)
+                    header_text=$(echo "$line" | sed -E 's/^#{1,6}[[:space:]](.+)/\1/')
+                    html_content="${html_content}<h$level id=\"${header_text}\">$(convert_special_characters "$header_text")</h$level>"
+                else
+                    # Detect and convert Markdown lists to HTML lists
+                    if echo "$line" | grep -qE '^[[:space:]]*- '; then
+                        item_text=$(echo "$line" | sed -E 's/^[[:space:]]*- (.+)/\1/')
+                        if [ -z "$in_unordered_list" ]; then
+                            in_unordered_list=true
+                            html_content="${html_content}<ul>"
+                        fi
+                        html_content="${html_content}<li>$(convert_special_characters "$item_text")</li>"
+                    elif echo "$line" | grep -qE '^[[:space:]]*[0-9]+\.[[:space:]]'; then
+                        item_text=$(echo "$line" | sed -E 's/^[[:space:]]*[0-9]+\.[[:space:]](.+)/\1/')
+                        if [ -z "$in_ordered_list" ]; then
+                            in_ordered_list=true
+                            html_content="${html_content}<ol>"
+                        fi
+                        html_content="${html_content}<li>$(convert_special_characters "$item_text")</li>"
+                    else
+                        # If no list item detected, close any open list tags
+                        if [ "$in_unordered_list" ]; then
+                            in_unordered_list=""
+                            html_content="${html_content}</ul>"
+                        fi
+                        if [ "$in_ordered_list" ]; then
+                            in_ordered_list=""
+                            html_content="${html_content}</ol>"
+                        fi
+
+                        #  Check if the line starts with '<ELEMENT_NAME>' and continue capturing lines
+                        if echo "$line" | grep -qE '^<.*>'; then
+                            echo "Y"
+                            element_name="${BASH_REMATCH[0]}"
+                            in_element=true
+                            element_content=""
+                        elif [ "$in_element" = true ]; then
+                            # Check if the line starts with '</ELEMENT_NAME>' to close the element
+                            if echo "$line" | grep -qE '^<\/.*>'; then
+                                in_element=false
+                                html_content="${html_content}$element_name$element_content${BASH_REMATCH[0]}"
+                            else
+                                element_content="${element_content}$line
+"
+                            fi
+                        else
+
+                            # Generate a random number between 0 and 1 (0 or 1)
+                            random_byte=$(od -An -N1 -i /dev/urandom)
+                            random_number=$((random_byte % 2))
+
+                            # Check if the random number is 1 (true) or 0 (false)
+                            if [ "$random_number" -eq 1 ]; then
+                                line="$(insert_randomly "$line")"
+                            fi
+
+                            # Convert other Markdown elements to HTML with special character conversion
+                            line="$(convert_special_characters "$line")"
+
+                            # Append the line to HTML content
+                            html_content="${html_content}$line
+"
+                        fi
+                    fi
+                fi
+            fi
+        fi
+    fi
+done < "$input_file"
+
+# Close any open list tags
+if [ "$in_unordered_list" ]; then
+    in_unordered_list=""
+    html_content="${html_content}</ul>"
+fi
+if [ "$in_ordered_list" ]; then
+    in_ordered_list=""
+    html_content="${html_content}</ol>"
+fi
+
+# Close the HTML content
+#html_content="${html_content}</body></html>"
+
+# Write the HTML content to the output file
+echo "$html_content"
