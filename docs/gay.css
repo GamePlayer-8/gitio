@@ -1,0 +1,232 @@
+/* CSS for styling the sidebar */
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-attachment: fixed;
+}
+
+body::before {
+    background-color: #00bbff23;
+    background-image: radial-gradient(#00d9ff 10%, transparent 11%);
+    background-size: 5px 5px;
+    background-position: 0 0, 30px 30px;
+    background-repeat: repeat;
+    z-index: -1;
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+body::after {
+    background-image: radial-gradient(#b6ff9784 1%, transparent 80%);
+    background-size: cover;
+    background-position: top-left;
+    background-repeat: no-repeat;
+    z-index: -1;
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#sidebar {
+    background-image: linear-gradient(#ff730031, #00000000);
+    padding: 2%;
+    height: auto;
+    color: #ff6a00;
+}
+
+#sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#sidebar ul li {
+    margin-bottom: 10px;
+}
+
+#sidebar a {
+    text-decoration: none;
+    color: #fff;
+    background-color: #00000000;
+    border-radius: 5px;
+    padding: 1px;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+#sidebar a:hover {
+    background-color: #333;
+}
+
+#sidebar a:active {
+    background-color: #695e557a;
+}
+
+#content {
+    background-image: linear-gradient(#00000000 0%, #75523a7c 6%, #00000000);
+    padding: 2%;
+    width: 95%;
+    height: auto;
+    color: #ffffff;
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.276);
+    overflow-x: auto;
+}
+
+#content pre {
+    overflow-x: auto;
+}
+
+#content code {
+    color: #6cff3f;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 1px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ffae0000;
+    box-shadow: 0px 4px 6px rgba(131, 93, 66, 0);
+    transition: all 0.3s ease;
+    white-space: pre-line;
+}
+
+#content pre code {
+    color: #fff;
+    display: inline-block; /* or inline-block */
+    width: auto;
+    overflow-x: auto;
+    background-color: #00000057;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ffffff;
+    box-shadow: 0px 4px 6px rgba(66, 131, 104, 0.713);
+    transition: all 0.3s ease;
+    white-space:break-spaces;
+}
+
+#content pre code:hover {
+    padding: 10px;
+    border-color: #00ff08;
+}
+
+#content code:hover {
+    cursor: copy;
+    color: #19ffb6;
+}
+
+#content hr {
+    color: #ffffff;
+}
+
+#content li {
+    padding: 5px;
+    padding-bottom: 10px;
+}
+
+#x {
+    display: inline-flex;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+header {
+    display: inline-flex;
+    background-image: linear-gradient(#d386ffa0, #87f7ff7d, #00000000);
+    padding-bottom: 5px;
+    padding-top: 5px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    /* Apply the box shadow only to the bottom */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header * {
+    margin: 5px;
+    padding: 0px;
+    float: left;
+    background: linear-gradient(45deg, #c6f9ff, #ece5ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    
+    transition: all 0.3s ease;
+}
+
+header *:hover {
+    background: linear-gradient(45deg, #7cf2ff, #bfa7ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.276);
+}
+
+header a {
+    background-color: #00000000;
+    border-radius: 5px;
+    padding: 1px;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+header a:hover {
+    background-color: #333;
+}
+
+header a:active {
+    background-color: #695e557a;
+}
+
+header div {
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 5px;
+}
+
+/* Style the list items */
+header div a {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+details[open], details {
+    padding-bottom: 50px;
+}
+
+details[open] summary~* {
+    animation: sweep .5s ease-in-out;
+}
+
+@keyframes sweep {
+    0% {
+        opacity: 0;
+        margin-left: -10px
+    }
+
+    100% {
+        opacity: 1;
+        margin-left: 0px
+    }
+}

@@ -1,0 +1,33 @@
+name: Container 🔧
+on:
+  push:
+    branches:
+      - main
+      - dev
+    tags:
+      - '*'
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: alpine # use the alpine image
+      options: --privileged # enable privileged mode for the container
+
+    steps:
+        - name: 💜 Checkout 💜
+          uses: gameplayer-8/gitio@v20
+          with:
+            type: 'checkout'
+
+        - name: Setup tag
+          run: |
+            echo "C_TAG=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
+
+        - name: 💖 Upload container 💖
+          uses: gameplayer-8/gitio@v20
+          with:
+            type: 'container'
+            cmd: 'OUTPUT_IMAGE_NAME:gitio:${{ env.C_TAG }} GIT_WORKDIR:.'
+
