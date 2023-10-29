@@ -53,6 +53,7 @@ codeberg_patch_post() {
 github_patch_post() {
     export GIT_DOMAIN="$CI_REPO_OWNER"'.'"github.io"
     export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
+    export GIT_CONTAINER_HOST="ghcr.io"
 }
 
 system_environment() {
@@ -67,6 +68,7 @@ system_environment() {
     export GIT_EMAIL='example@example.com'
     export GIT_WORKDIR="$(pwd)"
     export GIT_SHA="$(basename "${CI_COMMIT_URL}")"
+    export GIT_CONTAINER_HOST="${GIT_HOST}"
 }
 
 app_installer() {
@@ -204,15 +206,15 @@ EOF
     export GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
 
     GIT_USERNAME="$(echo "${GIT_USERNAME}" | tr '[:upper:]' '[:lower:]')"
-    GIT_HOST="$(echo "${GIT_HOST}" | tr '[:upper:]' '[:lower:]')"
+    GIT_CONTAINER_HOST="$(echo "${GIT_CONTAINER_HOST}" | tr '[:upper:]' '[:lower:]')"
     OUTPUT_IMAGE_NAME="$(echo "${OUTPUT_IMAGE_NAME}" | tr '[:upper:]' '[:lower:]')"
 
-    container_credentials "${GIT_HOST}" "${GIT_USERNAME}" "${GIT_TOKEN}"
+    container_credentials "${GIT_CONTAINER_HOST}" "${GIT_USERNAME}" "${GIT_TOKEN}"
 
     cd "${GIT_WORKDIR}"
     echo "${GIT_WORKDIR}"
     export HOME="/kaniko"
-    kaniko --context . --dockerfile ./Dockerfile --destination "${GIT_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
+    kaniko --context . --dockerfile ./Dockerfile --destination "${GIT_CONTAINER_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
 
     exit $?
 }
