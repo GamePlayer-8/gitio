@@ -32,8 +32,10 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - --build-arg CMD_TYPE=${{ inputs.type }}
-    - --build-arg CMD=${{ inputs.cmd }}
-    - --build-arg GITHUB_TOKEN=${{ inputs.token }}
-    - --build-arg GITHUB_REPO=${{ inputs.repository }}
-    - --build-arg GITHUB_REF=${{ inputs.ref }}
+    - /bin/sh -c \
+        "CMD_TYPE=${{ inputs.type }} \
+        CMD=${{ inputs.cmd }} \
+        GITHUB_TOKEN=${{ inputs.token }} \
+        GITHUB_REPO=${{ inputs.repository }} \
+        GITHUB_REF=${{ inputs.ref }} \
+        /usr/bin/gitio"
