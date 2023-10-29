@@ -38,8 +38,8 @@ github_patch() {
     export CI_COMMIT_REF="$GITHUB_REF"
     export SYSTEM_TOKEN_PASSWD="$GITHUB_TOKEN"
     export OCI_TOKEN="$GITHUB_TOKEN"
-    export CI_REPO_NAME="$GITHUB_NAME"
-    export CI_REPO_OWNER="$GITHUB_OWNER"
+    export CI_REPO_NAME="$(echo "$GITHUB_REPO" | cut -d '/' -f 2)"
+    export CI_REPO_OWNER="$(echo "$GITHUB_REPO" | cut -d '/' -f 1)"
     export CI_REPO="$GITHUB_REPO"
     export CI_REPO_URL='https://github.com/'"$CI_REPO_OWNER"'/'"$CI_REPO_NAME"
 }

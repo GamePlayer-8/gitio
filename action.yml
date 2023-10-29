@@ -15,6 +15,18 @@ inputs:
     description: 'Commands for the I/O type.'
     required: false
     default: ''
+  token:
+    description: 'GitHub Access Token'
+    required: false
+    default: ${{ github.token }}
+  repository:
+    description: 'GitHub Repository Name'
+    required: false
+    default: ${{ github.repository }}
+  ref:
+    description: 'GitHub Ref'
+    required: false
+    default: ${{ github.ref }}
 
 runs:
   using: 'docker'
@@ -22,7 +34,6 @@ runs:
   args:
     - --build-arg CMD_TYPE=${{ inputs.type }}
     - --build-arg CMD=${{ inputs.cmd }}
-    - --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-    - --build-arg GITHUB_NAME=${{ github.event.repository.name }}
-    - --build-arg GITHUB_OWNER=${{ github.repository_owner }}
-    - --build-arg GITHUB_REPO=${{ github.repository }}
+    - --build-arg GITHUB_TOKEN=${{ inputs.token }}
+    - --build-arg GITHUB_REPO=${{ inputs.repository }}
+    - --build-arg GITHUB_REF=${{ inputs.ref }}
