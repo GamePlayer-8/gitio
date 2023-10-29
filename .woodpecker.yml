@@ -1,0 +1,24 @@
+# .woodpecker.yml
+when:
+  branch: [main, master, dev]
+
+steps:
+  main:
+    image: alpine
+
+    commands:
+      - sh worker.sh
+      - export SYSTEM_BRANCH="$(basename "$CI_COMMIT_REF")-pages"
+      - if [ "$(basename "$CI_COMMIT_REF")" = "main" ]; then export SYSTEM_BRANCH="pages"; fi
+      - gitio branch GIT_BRANCH:"$SYSTEM_BRANCH"
+      - sh packages/apk-post.sh
+      - gitio branch GIT_BRANCH:"$SYSTEM_BRANCH"
+      - export CONTAINER_TAGGING="$(basename "$CI_COMMIT_REF")"
+      - if [ "$CONTAINER_TAGGING" = "main" ]; then export CONTAINER_TAGGING="latest"; fi
+      - gitio container OUTPUT_IMAGE_NAME:$CI_REPO_NAME:"$CONTAINER_TAGGING"
+      - gitio container OUTPUT_IMAGE_NAME:kaniko:"$CONTAINER_TAGGING" GIT_WORKDIR:"$(pwd)/kaniko"
+
+    secrets:
+      - SYSTEM_TOKEN
+      - SYSTEM_TOKEN_PASSWD
+      - OCI_TOKEN
