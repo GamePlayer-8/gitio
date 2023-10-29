@@ -15,29 +15,14 @@ inputs:
     description: 'Commands for the I/O type.'
     required: false
     default: ''
-  wizard:
-    description: 'Setup GitHub variables automatically?'
-    required: false
-    default: 'true'
 
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.type }}
-    - ${{ inputs.cmd }}
-    - ${{ inputs.wizard }}
-
-  steps:
-      - name: Setup Wizard
-        run: |
-          if ! [ "${{ inputs.wizard }}" = "false" ]; then
-              echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-              echo "GITHUB_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
-              echo "GITHUB_OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
-              echo "GITHUB_REPO=${{ github.repository }}" >> $GITHUB_ENV
-          fi
-
-      - name: Runtime
-        run: |
-          CMD_TYPE="${{ inputs.type }}" CMD="${{ inputs.cmd }}" gitio
+    - --build-arg CMD_TYPE=${{ inputs.type }}
+    - --build-arg CMD=${{ inputs.cmd }}
+    - --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+    - --build-arg GITHUB_NAME=${{ github.event.repository.name }}
+    - --build-arg GITHUB_OWNER=${{ github.repository_owner }}
+    - --build-arg GITHUB_REPO=${{ github.repository }}
