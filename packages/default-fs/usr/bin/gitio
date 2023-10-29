@@ -135,7 +135,7 @@ checkout() {
     git init -b "${GIT_BRANCH}"
     git config --global safe.directory "$(realpath "${GIT_WORKDIR}")"
     git remote add origin "$url" 
-    git fetch --no-tags --depth=1 --filter=tree:0 origin "+${$CI_COMMIT_REF}:"
+    git fetch --no-tags --depth=1 --filter=tree:0 origin "+${CI_COMMIT_REF}:"
     git reset --hard -q "${GIT_SHA}"
     git submodule update --init --recursive
     git lfs fetch
