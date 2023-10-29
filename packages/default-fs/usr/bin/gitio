@@ -273,4 +273,8 @@ EOF
     exit $?
 }
 
+if [ "$DEBUG_ENV" = "true" ]; then
+    env
+fi
+
 eval "$MODE"
