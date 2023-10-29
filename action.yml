@@ -31,11 +31,11 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  env:
+    CMD_TYPE: ${{ inputs.type }}
+    CMD: ${{ inputs.cmd }}
+    GITHUB_TOKEN: ${{ inputs.token }}
+    GITHUB_REPO: ${{ inputs.repository }}
+    GITHUB_REF: ${{ inputs.ref }}
   args:
-    - /bin/sh -c
-        "CMD_TYPE=${{ inputs.type }}
-        CMD=${{ inputs.cmd }}
-        GITHUB_TOKEN=${{ inputs.token }}
-        GITHUB_REPO=${{ inputs.repository }}
-        GITHUB_REF=${{ inputs.ref }}
-        /usr/bin/gitio"
+    - gitio
