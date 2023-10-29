@@ -1,0 +1,28 @@
+name: 'gitio-chimmie'
+description: 'An I/O for the Git server communication & builder.'
+author: 'Chimmie Firefly'
+
+branding:
+  icon: 'activity'
+  color: 'orange'
+
+inputs:
+  type:
+    description: 'Runtime I/O type.'
+    required: false
+    default: 'checkout'
+  cmd:
+    description: 'Commands for the I/O type.'
+    required: false
+    default: ''
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - --build-arg CMD_TYPE=${{ inputs.type }}
+    - --build-arg CMD=${{ inputs.cmd }}
+    - --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+    - --build-arg GITHUB_NAME=${{ github.event.repository.name }}
+    - --build-arg GITHUB_OWNER=${{ github.repository_owner }}
+    - --build-arg GITHUB_REPO=${{ github.repository }}
