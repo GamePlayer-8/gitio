@@ -16,7 +16,7 @@ inputs:
     required: false
     default: ''
 
-jobs:
+runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
