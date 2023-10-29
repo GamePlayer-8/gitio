@@ -23,7 +23,8 @@ jobs:
 
         - name: Setup tag
           run: |
-            echo "C_TAG=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
+            if [ "$(echo $GITHUB_REF | cut -d'/' -f 3)" = "main" ]; then echo "C_TAG=latest" >> $GITHUB_ENV; else \
+            echo "C_TAG=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV; fi
 
         - name: 💖 Upload container 💖
           uses: gameplayer-8/gitio@v22
