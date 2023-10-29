@@ -27,6 +27,10 @@ inputs:
     description: 'GitHub Ref'
     required: false
     default: ${{ github.ref }}
+  sha:
+    description: 'GitHub SHA'
+    required: false
+    default: ${{ github.sha }}
   envdebug:
     description: 'Display Environment'
     required: false
@@ -41,6 +45,7 @@ runs:
     GITHUB_TOKEN: ${{ inputs.token }}
     GITHUB_REPO: ${{ inputs.repository }}
     GITHUB_REF: ${{ inputs.ref }}
+    GITHUB_SHA: ${{ inputs.sha }}
     DEBUG_ENV: ${{ inputs.envdebug }}
   args:
     - gitio
