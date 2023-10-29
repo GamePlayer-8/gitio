@@ -1,0 +1,25 @@
+/* width */
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #00000000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(#fff19992, #9000ff);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(#fdff8792, #6600b4);
+}
+
+/* For Mozilla-based browsers */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #ffd500 #ffffff00;
+}
