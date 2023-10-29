@@ -42,10 +42,16 @@ github_patch() {
     export CI_REPO_OWNER="$(echo "$GITHUB_REPO" | cut -d '/' -f 1)"
     export CI_REPO="$GITHUB_REPO"
     export CI_REPO_URL='https://github.com/'"$CI_REPO_OWNER"'/'"$CI_REPO_NAME"
+    export CI_COMMIT_URL="${CI_REPO_URL}/commit/${GITHUB_SHA}"
 }
 
-codeberg_patch() {
+codeberg_patch_post() {
     export GIT_DOMAIN="$CI_REPO_OWNER"'.'"codeberg.page"
+    export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
+}
+
+github_patch_post() {
+    export GIT_DOMAIN="$CI_REPO_OWNER"'.'"github.io"
     export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
 }
 
@@ -60,10 +66,11 @@ system_environment() {
     export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
     export GIT_EMAIL='example@example.com'
     export GIT_WORKDIR="$(pwd)"
+    export GIT_SHA="$(basename "${CI_COMMIT_URL}")"
 }
 
 app_installer() {
-    sh "$INSTALLER" tar gzip git curl gawk coreutils >/dev/null
+    sh "$INSTALLER" tar gzip git git-lfs curl gawk coreutils >/dev/null
 }
 
 xssh() {
@@ -99,7 +106,11 @@ fi
 system_environment
 
 if [ "$GIT_HOST" = "codeberg.org" ]; then
-    codeberg_patch
+    codeberg_patch_post
+fi
+
+if [ "$GITHUB_ACTIONS" = "true" ]; then
+    github_patch_post
 fi
 
 if ! [ -z "$SYSTEM_TOKEN" ]; then
@@ -116,9 +127,19 @@ checkout() {
     if [ -z "$SYSTEM_TOKEN" ]; then
         url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_REPO"
     else
-        url='git@'"$GIT_HOST"':'"$GIT_REPO"'.git'
+        url='ssh://git@'"$GIT_HOST"':'"$GIT_REPO"'.git'
     fi
-    git clone $CMD "$url"
+    rm -rf "${GIT_WORKDIR}/.git"
+    mkdir -p "${GIT_WORKDIR}" >/dev/null 2>&1 3>&1
+    cd "${GIT_WORKDIR}"
+    git init -b "${GIT_BRANCH}"
+    git config --global safe.directory "$(realpath "${GIT_WORKDIR}")"
+    git remote add origin "$url" 
+    git fetch --no-tags --depth=1 --filter=tree:0 origin "+${$CI_COMMIT_REF}:"
+    git reset --hard -q "${GIT_SHA}"
+    git submodule update --init --recursive
+    git lfs fetch
+    git lfs checkout
     exit $?
 }
 
