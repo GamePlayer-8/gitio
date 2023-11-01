@@ -34,6 +34,10 @@ if [ "$MODE" == "" ] || [ "$MODE" == "help" ]; then
     exit 0
 fi
 
+if [ "$(echo "$CI_REPO_URL" | cut -f 3 -d '/')" == "github.com" ]; then
+    export GITHUB_ACTIONS="true"
+fi
+
 github_patch() {
     export CI_COMMIT_REF="$GITHUB_REF"
     export SYSTEM_TOKEN_PASSWD="$GITHUB_TOKEN"
@@ -62,7 +66,7 @@ system_environment() {
     export GIT_PROJECT_NAME="$CI_REPO_NAME"
     export GIT_USERNAME="$CI_REPO_OWNER"
     export GIT_REPO="$CI_REPO"
-    export GIT_HOST="$(echo "$CI_REPO_URL" | awk -F/ '{print $3}')"
+    export GIT_HOST="$(echo "$CI_REPO_URL" | cut -f 3 -d '/')"
     export GIT_DOMAIN="$CI_REPO_OWNER"'.'"$GIT_HOST"
     export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
     export GIT_EMAIL='example@example.com'
@@ -72,7 +76,7 @@ system_environment() {
 }
 
 app_installer() {
-    sh "$INSTALLER" tar gzip git git-lfs curl gawk coreutils >/dev/null
+    sh "$INSTALLER" tar gzip git git-lfs curl coreutils >/dev/null
 }
 
 xssh() {
