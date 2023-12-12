@@ -292,7 +292,7 @@ EOF
 
     git branch -m "$GIT_BRANCH"
 
-    echo "Pushing to 'https://$GIT_HOST/$GIT_USERNAME/$GIT_PROJECT_NAME'..."
+    echo "Pushing to '$url'..."
 
     if [ -z "$SYSTEM_TOKEN" ]; then
         echo "https://$GIT_USERNAME:$GIT_TOKEN@$GIT_HOST" > ~/.git-credentials
