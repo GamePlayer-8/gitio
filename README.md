@@ -1,6 +1,6 @@
 <p align="center" style="white-space: pre-line;">
   <a href="https://gitio.chimmie.k.vu" class="no-highlight">
-    <img src="docs/gitio.png" width="200" alt=":gitio-splash:" class="splash">
+    <img src="res/img/icon.png" width="200" alt=":gitio-splash:" class="splash">
   </a>
 </p>
 
@@ -35,11 +35,11 @@ A GitIO is an action for interacting with the git repository hosting & adds addi
 # Documentation
 
 Documentation for great software developers or whoever the meow you are, is available 
-[here](https://gitio.chimmie.k.vu/documentation/index.html).
+[here](https://gitio.chimmie.k.vu/docs/home.html).
 
 <br/>
 
-Documentation for cats is available [here](https://gitio.chimmie.k.vu/documentation/home_cat.html).
+Documentation for cats is available [here](https://gitio.chimmie.k.vu/docs/home_cat.html).
 
 # Contributing
 

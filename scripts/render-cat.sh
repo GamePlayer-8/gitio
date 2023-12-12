@@ -2,15 +2,16 @@
 
 SCRIPT_PATH="$(dirname "$(realpath "$0")")"
 CI_REPO_NAME="${CI_REPO_NAME:-'nan'}"
-HTML_HEAD="$SCRIPT_PATH"/../docs/docs-head.html
-HTML_UI="$SCRIPT_PATH"/../docs/docs-ui.html
+HTML_HEAD="$SCRIPT_PATH"/../res/cat-head.html
+HTML_UI="$SCRIPT_PATH"/../res/docs-ui.html
+DOCS_PATH="${DOCS_PATH:-$SCRIPT_PATH}"
 WIKI_DOCUMENTS=""
 
-wiki_docs="$(find "$SCRIPT_PATH" -type f -name "*.md")"
+wiki_docs="$(find "$DOCS_PATH" -type f -name "*.md")"
 
-find "$SCRIPT_PATH" -type f -name "*.md" | while IFS= read -r element; do
+find "$DOCS_PATH" -type f -name "*.md" | while IFS= read -r element; do
     content_name="$(basename "$element" | sed 's/\.md$//')"
-    new_path="$content_name"'.html'
+    new_path="$content_name"'_cat.html'
 
     first_letter="$(printf "%s" "$content_name" | cut -c1 | tr '[:lower:]' '[:upper:]')"
     rest_of_string="$(printf "%s" "$content_name" | cut -c2-)"
@@ -49,9 +50,9 @@ scrap_markdown() {
 }
 
 # Use a for loop to iterate over the Markdown files
-find "$SCRIPT_PATH" -type f -name "*.md" | while read -r file; do
+find "$DOCS_PATH" -type f -name "*.md" | while read -r file; do
     content_name="$(basename "$file" | sed 's/\.md$//')"
-    new_path="$(dirname "$file")/$content_name"'.html'
+    new_path="$(dirname "$file")/$content_name"'_cat.html'
     first_letter="$(printf "%s" "$content_name" | cut -c1 | tr '[:lower:]' '[:upper:]')"
     rest_of_string="$(printf "%s" "$content_name" | cut -c2-)"
     content_name="${first_letter}${rest_of_string}"
@@ -62,7 +63,7 @@ find "$SCRIPT_PATH" -type f -name "*.md" | while read -r file; do
     echo "$file_contents" > /tmp/contents.render.pages."$CI_REPO_NAME".tmp
 
     echo '<!DOCTYPE html>' > "$new_path"
-    echo '<html lang="en-US">' >> "$new_path"
+    echo '<html lang="meow-NYA">' >> "$new_path"
     cat "$HTML_HEAD" >> "$new_path"
 
     echo '<body>' >> "$new_path"
@@ -77,7 +78,7 @@ find "$SCRIPT_PATH" -type f -name "*.md" | while read -r file; do
 }" "$new_path"
     sed -i "s|<filename>|$content_name|" "$new_path"
     echo '<div id="content">' >> "$new_path"
-    sh "$SCRIPT_PATH"/markdown "$file" >> "$new_path"
+    markmeowdown "$file" >> "$new_path"
     echo '</div>' >> "$new_path"
     echo '</div>' >> "$new_path"
     echo '</body>' >> "$new_path"
@@ -87,4 +88,4 @@ done
 rm -f /tmp/contents.render.pages."$CI_REPO_NAME".tmp
 rm -f /tmp/documents.render.pages."$CI_REPO_NAME".tmp
 
-cp "$SCRIPT_PATH"/../docs/redirect.html "$SCRIPT_PATH"/index.html
+cp "$SCRIPT_PATH"/../res/redirect.html "$DOCS_PATH"/index.html
