@@ -91,7 +91,7 @@ xssh() {
 
     eval "$(ssh-agent -s)"
 
-    ssh -T git@"$GIT_HOST"
+    ssh -i "$HOME/.ssh/ci" -T -p 22 git@"$GIT_HOST"
 }
 
 if ! [ -f /tmp/gitio.ci ]; then
