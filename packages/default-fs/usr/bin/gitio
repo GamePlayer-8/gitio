@@ -86,11 +86,14 @@ xssh() {
 
     echo "$HOME"/.ssh/ci >> "$HOME"/.ssh/authorized_keys
 
+    echo 'Host *' >> /etc/ssh/ssh_config
     echo "   IdentityFile $HOME/.ssh/ci" >> /etc/ssh/ssh_config
 
     eval "$(ssh-agent -s)"
 
-    ssh -T git@"$GIT_HOST"
+    ssh-keyscan "$GIT_HOST" > "$HOME/.ssh/known_hosts"
+
+    ssh -T -p 22 git@"$GIT_HOST"
 }
 
 if ! [ -f /tmp/gitio.ci ]; then
@@ -140,7 +143,7 @@ checkout() {
     cd "${GIT_WORKDIR}"
     git init -b "${GIT_BRANCH}"
     git config --global safe.directory "$(realpath "${GIT_WORKDIR}")"
-    git remote add origin "$url" 
+    git remote add origin "$url"
     git fetch --no-tags --depth=1 --filter=tree:0 origin "+${CI_COMMIT_REF}:"
     git reset --hard -q "${GIT_SHA}"
     git submodule update --init --recursive
@@ -225,7 +228,6 @@ EOF
 
 branch() {
     echo '[BRANCH]'
-    echo "Upload branch ${GIT_BRANCH} onto ${GIT_REPO}..."
     echo "$CMD"
     if ! [ "$CMD" = "NaN" ]; then
         for element in $CMD; do
@@ -239,6 +241,8 @@ EOF
             export "$name=$value"
         done
     fi
+
+    echo "Upload branch ${GIT_BRANCH} onto ${GIT_REPO}..."
 
     export GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
 
@@ -290,7 +294,7 @@ EOF
 
     git branch -m "$GIT_BRANCH"
 
-    echo "Pushing to 'https://$GIT_HOST/$GIT_USERNAME/$GIT_PROJECT_NAME'..."
+    echo "Pushing to '$url'..."
 
     if [ -z "$SYSTEM_TOKEN" ]; then
         echo "https://$GIT_USERNAME:$GIT_TOKEN@$GIT_HOST" > ~/.git-credentials

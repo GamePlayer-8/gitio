@@ -29,6 +29,35 @@ build_zst() {
     sha256sum zst/pkg.tar.gz > zst.sha256.txt
 }
 
+build_apk() {
+    apk add --no-cache alpine-sdk sudo shadow sed
+    echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/wheel
+    rm -rf "$SCRIPT_PATH"/apk
+    mkdir -p "$SCRIPT_PATH"/apk/src
+    mkdir "$SCRIPT_PATH"/apk/pkg
+    cd "$SCRIPT_PATH"/apk/src
+    cp "$SCRIPT_PATH"/APKBUILD .
+    apk update
+    adduser -D builder
+    chown -R builder "${SCRIPT_PATH}"
+    usermod -aG abuild builder
+    usermod -aG wheel builder
+    sudo -u builder abuild-keygen -a -n -q -i
+    cp "$SCRIPT_PATH"/zst/* . -r
+    sed -i 's|https://gitio.chimmie.k.vu/packages/zst/pkg.tar.gz|pkg.tar.gz|g' APKBUILD
+    sudo -u builder abuild checksum
+    echo '[BUILDER]'
+    sudo -u builder abuild -r -m -P /tmp/
+    cd "$SCRIPT_PATH"
+    rm -rf apk
+    mv /tmp/apk .
+    rm -rf /tmp/apk
+    chown -R root:root "${SCRIPT_PATH}"
+    cp /etc/apk/keys/builder-*.pub apk/
+    mv apk/builder-*.pub apk/pubkey.rsa.pub
+    rm -f /etc/sudoers.d/wheel
+}
+
 prepare() {
     chmod +x "$SCRIPT_PATH"/default-fs/usr/bin/*
 }
@@ -36,3 +65,4 @@ prepare() {
 prepare
 build_deb
 build_zst
+build_apk

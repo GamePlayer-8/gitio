@@ -10,9 +10,8 @@ rm -rf "$SCRIPT_PATH"/.gitignore
 
 sh "$INSTALLER" sed
 
-sh "$SCRIPT_PATH"/index.sh
-sh "$SCRIPT_PATH"/documentation/render.sh
-sh "$SCRIPT_PATH"/documentation/render_cat.sh
+export DOCS_PATH="$SCRIPT_PATH/docs"
 
-cd "$SCRIPT_PATH"
-sh install.sh
+sh "$SCRIPT_PATH"/index.sh
+sh "$SCRIPT_PATH"/scripts/render.sh
+sh "$SCRIPT_PATH"/scripts/render-cat.sh
