@@ -1,0 +1,8 @@
+Package: gitio
+Version: 1.0
+Architecture: all
+Maintainer: Chimmie Firefly <gameplayer2019pl@tutamail.com>
+Description: GitIO
+ Frontend API for interacting with git hosting for CI.
+Depends: openssl (>= 1.0), git, coreutils, sed, curl, git-lfs
+Recommends: openssh-server, kaniko
