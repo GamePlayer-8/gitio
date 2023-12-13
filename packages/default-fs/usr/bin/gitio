@@ -91,7 +91,9 @@ xssh() {
 
     eval "$(ssh-agent -s)"
 
-    ssh -i "$HOME/.ssh/ci" -T -p 22 git@"$GIT_HOST"
+    ssh-keyscan "$GIT_HOST" > "$HOME/.ssh/known_hosts"
+
+    ssh -T -p 22 git@"$GIT_HOST"
 }
 
 if ! [ -f /tmp/gitio.ci ]; then
@@ -141,7 +143,7 @@ checkout() {
     cd "${GIT_WORKDIR}"
     git init -b "${GIT_BRANCH}"
     git config --global safe.directory "$(realpath "${GIT_WORKDIR}")"
-    git remote add origin "$url" 
+    git remote add origin "$url"
     git fetch --no-tags --depth=1 --filter=tree:0 origin "+${CI_COMMIT_REF}:"
     git reset --hard -q "${GIT_SHA}"
     git submodule update --init --recursive
