@@ -69,7 +69,8 @@ system_environment() {
     export GIT_HOST="$(echo "$CI_REPO_URL" | cut -f 3 -d '/')"
     export GIT_DOMAIN="$CI_REPO_OWNER"'.'"$GIT_HOST"
     export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
-    export GIT_EMAIL='example@example.com'
+    export GIT_EMAIL="${CI_REPO_OWNER_EMAIL:-example@example.com}"
+    export GIT_EMAIL="${EMAIL:-$GIT_EMAIL}"
     export GIT_WORKDIR="$(pwd)"
     export GIT_SHA="$(basename "${CI_COMMIT_URL}")"
     export GIT_CONTAINER_HOST="${GIT_HOST}"
