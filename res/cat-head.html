@@ -1,0 +1,33 @@
+
+<head>
+    <title>Wiki - <filename></title>
+    <meta name="icon" content="../res/img/icon.webp"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+    <link rel="stylesheet" href="../res/css/scroll-gay.css"/>
+    <link rel="stylesheet" href="../res/css/gay.css"/>
+    <link rel="stylesheet" href="../res/css/viewport.css"/>
+    <link rel="icon" href="../res/img/icon.webp"/>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add a click event listener to all code elements on the page
+            const codeElements = document.querySelectorAll('code');
+            
+            codeElements.forEach(codeElement => {
+                codeElement.addEventListener('click', () => {
+                    // Create a temporary textarea element to hold the code text
+                    const textarea = document.createElement('textarea');
+                    textarea.value = codeElement.textContent;
+                    document.body.appendChild(textarea);
+
+                    // Select and copy the text from the textarea
+                    textarea.select();
+                    document.execCommand('copy');
+
+                    // Remove the temporary textarea
+                    document.body.removeChild(textarea);
+                });
+            });
+        });
+    </script>
+</head>
