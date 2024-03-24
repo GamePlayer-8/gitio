@@ -1,0 +1,312 @@
+#!/bin/sh
+
+SCRIPT_PATH="$(dirname "$(realpath "$0")")"
+INSTALLER="$SCRIPT_PATH"/../share/gitio/scripts/insti.sh
+MODE="${1:-$MODE}"
+MODE="${MODE:-$CMD_TYPE}"
+MODE="${MODE:-'checkout'}"
+
+XCMD=""
+if ! [ "$2" == "" ]; then
+    shift  # Shift to remove the first argument (the script name)
+fi
+
+# Loop through the remaining arguments
+for arg in "$@"; do
+  XCMD="$XCMD $arg"
+done
+
+CMD="${XCMD:-$CMD}"
+CMD="${CMD:-"NaN"}"
+
+unset XCMD
+
+HOME="${HOME:-'/'}"
+
+export DEBIAN_FRONTEND=noninteractive
+export TZ=UTC
+export LOCAL_DIR="$(pwd)"
+
+if [ "$MODE" == "" ] || [ "$MODE" == "help" ]; then
+    echo 'Usage:'
+    echo '   gitio <container/branch/checkout> <config>'
+    echo 'Look for full documentation at https://gitio.chimmie.k.vu/documentation'
+    exit 0
+fi
+
+if [ "$(echo "$CI_REPO_URL" | cut -f 3 -d '/')" == "github.com" ]; then
+    export GITHUB_ACTIONS="true"
+fi
+
+github_patch() {
+    export CI_COMMIT_REF="$GITHUB_REF"
+    export SYSTEM_TOKEN_PASSWD="$GITHUB_TOKEN"
+    export OCI_TOKEN="$GITHUB_TOKEN"
+    export CI_REPO_NAME="$(echo "$GITHUB_REPO" | cut -d '/' -f 2)"
+    export CI_REPO_OWNER="$(echo "$GITHUB_REPO" | cut -d '/' -f 1)"
+    export CI_REPO="$GITHUB_REPO"
+    export CI_REPO_URL='https://github.com/'"$CI_REPO_OWNER"'/'"$CI_REPO_NAME"
+    export CI_COMMIT_URL="${CI_REPO_URL}/commit/${GITHUB_SHA}"
+}
+
+codeberg_patch_post() {
+    export GIT_DOMAIN="$CI_REPO_OWNER"'.'"codeberg.page"
+    export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
+}
+
+github_patch_post() {
+    export GIT_DOMAIN="$CI_REPO_OWNER"'.'"github.io"
+    export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
+    export GIT_CONTAINER_HOST="ghcr.io"
+}
+
+system_environment() {
+    export GIT_BRANCH="$(basename "$CI_COMMIT_REF")"
+    export GIT_TOKEN="$SYSTEM_TOKEN_PASSWD"
+    export GIT_PROJECT_NAME="$CI_REPO_NAME"
+    export GIT_USERNAME="$CI_REPO_OWNER"
+    export GIT_REPO="$CI_REPO"
+    export GIT_HOST="$(echo "$CI_REPO_URL" | cut -f 3 -d '/')"
+    export GIT_DOMAIN="$CI_REPO_OWNER"'.'"$GIT_HOST"
+    export GIT_WEBPAGE='https://'"$GIT_DOMAIN"'/'"$CI_REPO_NAME"
+    export GIT_EMAIL="${CI_REPO_OWNER_EMAIL:-example@example.com}"
+    export GIT_EMAIL="${EMAIL:-$GIT_EMAIL}"
+    export GIT_WORKDIR="$(pwd)"
+    export GIT_SHA="$(basename "${CI_COMMIT_URL}")"
+    export GIT_CONTAINER_HOST="${GIT_HOST}"
+}
+
+app_installer() {
+    sh "$INSTALLER" tar gzip git git-lfs curl coreutils >/dev/null
+}
+
+xssh() {
+    mkdir -p "$HOME"/.ssh 2>/dev/null 3>&2
+    echo "$SYSTEM_TOKEN" > "$HOME"/.ssh/ci
+    chmod 600 "$HOME"/.ssh/ci
+
+    echo "$HOME"/.ssh/ci >> "$HOME"/.ssh/authorized_keys
+
+    echo 'Host *' >> /etc/ssh/ssh_config
+    echo "   IdentityFile $HOME/.ssh/ci" >> /etc/ssh/ssh_config
+
+    eval "$(ssh-agent -s)"
+
+    ssh-keyscan "$GIT_HOST" > "$HOME/.ssh/known_hosts"
+
+    ssh -T -p 22 git@"$GIT_HOST"
+}
+
+if ! [ -f /tmp/gitio.ci ]; then
+    app_installer
+    echo 'OK' > /tmp/gitio.ci
+fi
+
+if ! [ -f /tmp/gitio-ssh.ci ]; then
+    if [ "$OPENSSH" = "true" ]; then
+        sh "$INSTALLER" openssh >/dev/null
+        echo 'OK' > /tmp/gitio-ssh.ci
+    fi
+fi
+
+if [ "$GITHUB_ACTIONS" = "true" ]; then
+    github_patch
+fi
+
+system_environment
+
+if [ "$GIT_HOST" = "codeberg.org" ]; then
+    codeberg_patch_post
+fi
+
+if [ "$GITHUB_ACTIONS" = "true" ]; then
+    github_patch_post
+fi
+
+if ! [ -z "$SYSTEM_TOKEN" ]; then
+    if [ "$OPENSSH" = "true" ]; then
+        xssh
+    else
+        echo 'WARN: OpenSSH functionality may not work although SYSTEM_TOKEN is defined!'
+    fi
+fi
+
+checkout() {
+    echo '[CHECKOUT]'
+    echo "Fetching Remote repository ${GIT_REPO}..."
+    if [ -z "$SYSTEM_TOKEN" ]; then
+        url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_REPO"
+    else
+        url='ssh://git@'"$GIT_HOST"':'"$GIT_REPO"'.git'
+    fi
+    rm -rf "${GIT_WORKDIR}/.git"
+    mkdir -p "${GIT_WORKDIR}" >/dev/null 2>&1 3>&1
+    cd "${GIT_WORKDIR}"
+    git init -b "${GIT_BRANCH}"
+    git config --global safe.directory "$(realpath "${GIT_WORKDIR}")"
+    git remote add origin "$url"
+    git fetch --no-tags --depth=1 --filter=tree:0 origin "+${CI_COMMIT_REF}:"
+    git reset --hard -q "${GIT_SHA}"
+    git submodule update --init --recursive
+    git lfs fetch
+    git lfs checkout
+    exit $?
+}
+
+container_credentials() {
+    # Create the Docker config.json
+    local config_file="/kaniko/.docker/config.json"
+
+    local registry_url="$1"
+
+    # Encode the credentials in base64
+    local credentials="$(echo -n "$2:$3" | base64)"
+
+    # Generate the JSON configuration
+    local json_config='{
+    "auths": {
+        "'"$registry_url"'": {
+        "auth": "'"$credentials"'"
+        }
+    }
+    }'
+
+    # Make docker directory if doesn't exist
+    mkdir -p "$(dirname "$config_file")" 2>/dev/null 3>&2
+
+    # Write the JSON to the config file
+    echo "$json_config" > "$config_file"
+    chmod a-w "$config_file"
+}
+
+container() {
+    echo '[CONTAINER]'
+    echo "Building a container, using kaniko, with the following command line: $CMD"
+    if ! [ "$CMD" = "NaN" ]; then
+        for element in $CMD; do
+            if ! [ -z "${element##*:*}" ]; then
+                echo 'Missing data syntax in '"$element"'. Exiting...'
+                exit 1
+            fi
+            IFS=":" read -r name value <<EOF
+$element
+EOF
+            export "$name=$value"
+        done
+    fi
+
+    if ! [ -f "/tmp/kaniko.ci" ]; then
+        sh "$INSTALLER" make go bash >/dev/null
+
+        git clone --recursive https://codeberg.org/mirri/kaniko /kaniko >/dev/null
+
+        cd /kaniko
+
+        make
+
+        mv out/executor /usr/bin/kaniko
+        chmod +x /usr/bin/kaniko
+
+        echo 'OK' > /tmp/kaniko.ci
+    fi
+    standard="$GIT_PROJECT_NAME":"$GIT_BRANCH"
+    OUTPUT_IMAGE_NAME="${OUTPUT_IMAGE_NAME:-$standard}"
+    export GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
+
+    GIT_USERNAME="$(echo "${GIT_USERNAME}" | tr '[:upper:]' '[:lower:]')"
+    GIT_CONTAINER_HOST="$(echo "${GIT_CONTAINER_HOST}" | tr '[:upper:]' '[:lower:]')"
+    OUTPUT_IMAGE_NAME="$(echo "${OUTPUT_IMAGE_NAME}" | tr '[:upper:]' '[:lower:]')"
+
+    container_credentials "${GIT_CONTAINER_HOST}" "${GIT_USERNAME}" "${GIT_TOKEN}"
+
+    cd "${GIT_WORKDIR}"
+    echo "${GIT_WORKDIR}"
+    export HOME="/kaniko"
+    kaniko --context . --dockerfile ./Dockerfile --destination "${GIT_CONTAINER_HOST}"/"${GIT_USERNAME}"/"${OUTPUT_IMAGE_NAME}"
+
+    exit $?
+}
+
+branch() {
+    echo '[BRANCH]'
+    echo "$CMD"
+    if ! [ "$CMD" = "NaN" ]; then
+        for element in $CMD; do
+            if ! [ -z "${element##*:*}" ]; then
+                echo 'Missing data syntax in '"$element"'. Exiting...'
+                exit 1
+            fi
+            IFS=":" read -r name value <<EOF
+$element
+EOF
+            export "$name=$value"
+        done
+    fi
+
+    echo "Upload branch ${GIT_BRANCH} onto ${GIT_REPO}..."
+
+    export GIT_WORKDIR="${GIT_WORKDIR:-"$(pwd)"}"
+
+    git config --global credential.helper store
+    git config --global user.name "$GIT_USERNAME"
+    git config --global user.email "$GIT_EMAIL"
+    git config --global http.postBuffer 524288000
+    git config --global init.defaultBranch "$GIT_BRANCH"
+
+    echo "Checking https://${GIT_HOST}/${GIT_USERNAME}/${GIT_PROJECT_NAME}..."
+
+    http_response=404 # $(curl -s -o /dev/null -w "%{http_code}" -u "$GIT_USERNAME:$GIT_TOKEN" -X GET )
+
+    if [ "$GIT_HOST" = "github.com" ]; then
+        http_response=$(curl -s -o /dev/null -w "%{http_code}" -u "$GIT_USERNAME:$GIT_TOKEN" -X GET https://api.github.com/repos/"$GIT_USERNAME"/"$GIT_PROJECT_NAME"/branches/"$GIT_BRANCH")
+    fi
+
+    echo 'Resolve branch exit code: '"$http_response"
+
+    cd "$(dirname "$GIT_WORKDIR")"
+
+    if [ -z "$SYSTEM_TOKEN" ]; then
+        url='https://'$GIT_USERNAME:$GIT_TOKEN@"$GIT_HOST"'/'"$GIT_REPO"
+    else
+        url='git@'"$GIT_HOST"':'"$GIT_REPO"'.git'
+    fi
+
+    if [ $http_response -eq 200 ]; then
+        git clone -b "$GIT_BRANCH" "$url" "$GIT_BRANCH" >/dev/null
+
+        rm -rf "$(basename "$GIT_WORKDIR")"/.git
+        mv "$GIT_BRANCH"/.git "$(basename "$GIT_WORKDIR")"/
+
+        rm -rf "$GIT_BRANCH"
+        cd "$GIT_WORKDIR"
+    else
+        cd "$GIT_WORKDIR"
+        rm -rf .git
+        git init >/dev/null
+    fi
+
+    cd "${GIT_WORKDIR}"
+
+    git add -A
+    git commit -m "$GIT_BRANCH synchronization at $(date +%Y-%m-%d)" >/dev/null
+
+    git remote remove origin 2>/dev/null 3>&2
+    git remote add origin "$url"
+
+    git branch -m "$GIT_BRANCH"
+
+    echo "Pushing to '$url'..."
+
+    if [ -z "$SYSTEM_TOKEN" ]; then
+        echo "https://$GIT_USERNAME:$GIT_TOKEN@$GIT_HOST" > ~/.git-credentials
+    fi
+
+    git push -f -u origin "$GIT_BRANCH"
+    exit $?
+}
+
+if [ "$DEBUG_ENV" = "true" ]; then
+    env
+fi
+
+eval "$MODE"
